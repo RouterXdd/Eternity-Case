@@ -1,0 +1,8 @@
+displayName: "Eternity case"
+name: "eternity-case"
+author: "R.O.T."
+main: "eternity.EternityMain"
+description: "Just mod with random shit"
+version: 1.0
+minGameVersion: 146
+java: true
