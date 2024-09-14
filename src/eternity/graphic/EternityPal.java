@@ -11,6 +11,8 @@ public class EternityPal {
     darkCosmicColor = Color.valueOf("3a9376"),
     viraColor = Color.valueOf("479953"),
     darkViraColor = Color.valueOf("317241"),
+    droneColor = Color.valueOf("4c69be"),
+    darkDroneColor = Color.valueOf("2a397d"),
     nissinColor = Color.valueOf("82863b"),
     nissinCultColor = Color.valueOf("6c6420"),
     cellOrangeFrontColor = Color.valueOf("ffa666"),

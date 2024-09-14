@@ -427,7 +427,6 @@ public class EternityUnits {
                     }}
             );
         }};
-        //TODO
         commander = new SpyUnitType("commander"){{
             constructor = TankUnit::create;
             squareShape = true;
@@ -438,11 +437,33 @@ public class EternityUnits {
             treadPullOffset = 3;
             speed = 0.8f;
             rotateSpeed = 3.15f;
-            health = 160;
+            health = 190;
             armor = 2f;
             itemCapacity = 0;
-            range = 100;
             treadRects = new Rect[]{new Rect(9 - 32f, 37 - 32f, 11, 9), new Rect(24 - 32f, 52 - 32f, 8, 8)};
+            weapons.add(new AdvWeapon("eternity-case-commander-weapon"){{
+                shootSound = Sounds.pew;
+                y = -2.5f;
+                x = 0;
+                top = rotate = true;
+                mirror = false;
+                reload = 8f;
+                shootCone = 35f;
+                inaccuracy = 25;
+                bullet = new BasicBulletType(){{
+                    speed = 3f;
+                    damage = 5;
+                    width = 6f;
+                    height = 10f;
+                    lifetime = 15f;
+                    shootEffect = Fx.sparkShoot;
+                    smokeEffect = Fx.shootBigSmoke;
+                    hitColor = backColor = trailColor = EternityPal.droneColor;
+                    sprite = "eternity-case-laser-blast";
+                    frontColor = Color.white;
+                    hitEffect = despawnEffect = Fx.hitBulletColor;
+                }};
+            }});
         }};
         barricade = new StellarUnit("barricade"){{
             hovering = true;
