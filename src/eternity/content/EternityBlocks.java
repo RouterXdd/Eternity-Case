@@ -64,6 +64,7 @@ public class EternityBlocks {
             stellarMetal, stellarMetal1, stellarMetalLamp,
                 //Cult
                 //Misc
+            digFloor1, digFloor2, digFloor3, digFloor4, digFloor5,
             smallRift, malachiteCrystal,
             oreGold, oreStrontium, oreCosmicDust, orePalladium,
             //crafting
@@ -185,6 +186,20 @@ public class EternityBlocks {
         stellarMetal1 = new AdvFloor("stellar-metal1", 0, stellarMetal);
         stellarMetalLamp = new AdvFloor("stellar-metal-lamp", 3, stellarMetal){{
             mapColor = Color.valueOf("27282b");
+        }};
+        digFloor1 = new Floor("dig-floor1", 0);
+        digFloor2 = new Floor("dig-floor2", 0);
+        digFloor3 = new Floor("dig-floor3", 0){{
+            placeableOn = false;
+        }};
+        digFloor4 = new Floor("dig-floor4", 0){{
+            placeableOn = false;
+        }};
+        digFloor5 = new Floor("dig-floor5", 0){{
+            placeableOn = false;
+            solid = true;
+            variants = 0;
+            canShadow = false;
         }};
         smallRift = new Rift("small-rift"){{
             requirements(Category.effect,BuildVisibility.sandboxOnly, with());

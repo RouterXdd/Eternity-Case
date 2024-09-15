@@ -9,7 +9,6 @@ import arc.struct.Seq;
 import arc.util.Time;
 import eternity.classes.entities.abilities.*;
 import eternity.classes.entities.bullets.AdvBasicBulletType;
-import eternity.classes.entities.bullets.NotLethalBasicBulletType;
 import eternity.classes.entities.draw.BladeDraw;
 import eternity.classes.entities.weapons.AdvWeapon;
 import eternity.classes.type.*;
@@ -44,9 +43,10 @@ public class EternityUnits {
             star, constellation, accumulation, starfall, space,
             commander, overseer, overlord, emperor, kingdom,
             barricade, shield, barrier, border, dome,
+            discuss, skirmish, fight, conflict, war,
             mionDrone, viraSavior, oblivion,
             //Stellar rift units
-            infectedMionDrone, infectedMionDroneL, infectedMionDroneXL, electron, proton, ion, ray,
+            infectedMionDrone, infectedMionDroneL, infectedMionDroneXL, electron, proton, neutron, atom,
             //cult units
             fault,
             //random units
@@ -526,6 +526,40 @@ public class EternityUnits {
                 }};
             }});
         }};
+        //TODO
+        shield = new StellarUnit("shield"){{
+            hovering = true;
+            shadowElevation = 0.12f;
+
+            drag = 0.09f;
+            speed = 1.12f;
+            rotateSpeed = 4.2f;
+            buildSpeed = 0.1f;
+            buildBeamOffset = 6.5f;
+
+            accel = 0.09f;
+            health = 870f;
+            armor = 3f;
+            hitSize = 17f;
+            engineOffset = 7f;
+            engineSize = 0f;
+            itemCapacity = 0;
+            useEngineElevation = false;
+            constructor = ElevationMoveUnit::create;
+
+            abilities.add(new MoveEffectAbility(4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 4f), new MoveEffectAbility(-4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 4f));
+
+            parts.add(new HoverPart(){{
+                x = 4.25f;
+                y = 0f;
+                mirror = true;
+                radius = 12f;
+                phase = 80f;
+                stroke = 3.6f;
+                layerOffset = -0.001f;
+                color = EternityPal.viraColor;
+            }});
+        }};
         mionDrone = new StellarUnit("mion-drone"){{
             constructor = UnitEntity::create;
             controller = u -> new MinerAI(){{
@@ -778,6 +812,7 @@ public class EternityUnits {
                 }};
             }});
         }};
+        //TODO
         clear = new ErekirUnitType("clear"){{
                 coreUnitDock = true;
                 controller = u -> new BuilderAI(true, 650);
