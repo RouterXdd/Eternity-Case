@@ -535,7 +535,7 @@ public class EternityUnits {
             speed = 1.12f;
             rotateSpeed = 4.2f;
             buildSpeed = 0.1f;
-            buildBeamOffset = 6.5f;
+            buildBeamOffset = 8f;
 
             accel = 0.09f;
             health = 870f;
@@ -547,7 +547,7 @@ public class EternityUnits {
             useEngineElevation = false;
             constructor = ElevationMoveUnit::create;
 
-            abilities.add(new MoveEffectAbility(4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 4f), new MoveEffectAbility(-4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 4f));
+            abilities.add(new MoveEffectAbility(4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 4f), new MoveEffectAbility(-4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
 
             parts.add(new HoverPart(){{
                 x = 4.25f;
@@ -559,6 +559,148 @@ public class EternityUnits {
                 layerOffset = -0.001f;
                 color = EternityPal.viraColor;
             }});
+        }};
+        //TODO
+        barrier = new StellarUnit("barrier"){{
+            hovering = true;
+            shadowElevation = 0.2f;
+
+            drag = 0.11f;
+            speed = 0.9f;
+            rotateSpeed = 3.7f;
+            buildSpeed = 0.2f;
+            buildBeamOffset = 11f;
+
+            accel = 0.09f;
+            health = 1730f;
+            armor = 4f;
+            hitSize = 23f;
+            engineOffset = 7f;
+            engineSize = 0f;
+            itemCapacity = 0;
+            useEngineElevation = false;
+            constructor = ElevationMoveUnit::create;
+
+            abilities.add(new MoveEffectAbility(8f, -5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-8f, -5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(0f, -7f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
+
+            parts.add(new HoverPart(){{
+                x = 8f;
+                y = -5.5f;
+                mirror = true;
+                radius = 17.5f;
+                phase = 95f;
+                stroke = 4f;
+                layerOffset = -0.001f;
+                color = EternityPal.viraColor;
+            }},
+                new HoverPart(){{
+                    x = 0f;
+                    y = -7f;
+                    mirror = false;
+                    radius = 17.5f;
+                    phase = 95f;
+                    stroke = 4f;
+                    layerOffset = -0.001f;
+                    color = EternityPal.viraColor;
+            }});
+        }};
+        border = new StellarUnit("border"){{
+            hovering = true;
+            shadowElevation = 0.25f;
+
+            drag = 0.14f;
+            speed = 0.68f;
+            rotateSpeed = 3.2f;
+            buildSpeed = 0.35f;
+            buildBeamOffset = 16f;
+
+            accel = 0.09f;
+            health = 5430f;
+            armor = 5f;
+            hitSize = 29f;
+            engineOffset = 7f;
+            engineSize = 0f;
+            itemCapacity = 0;
+            useEngineElevation = false;
+            constructor = ElevationMoveUnit::create;
+
+            abilities.add(new MoveEffectAbility(8f, -9f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-8f, -9f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(9f, 4f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-9f, 4f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
+
+            parts.add(new HoverPart(){{
+                          x = 8f;
+                          y = -9f;
+                          mirror = true;
+                          radius = 18f;
+                          phase = 110f;
+                          stroke = 5f;
+                          layerOffset = -0.001f;
+                          color = EternityPal.viraColor;
+                      }},
+                    new HoverPart(){{
+                        x = 9f;
+                        y = 4f;
+                        mirror = true;
+                        radius = 18f;
+                        phase = 110f;
+                        stroke = 5f;
+                        layerOffset = -0.001f;
+                        color = EternityPal.viraColor;
+                    }});
+        }};
+        dome = new StellarUnit("dome"){{
+            hovering = true;
+            shadowElevation = 0.25f;
+
+            drag = 0.14f;
+            speed = 0.68f;
+            rotateSpeed = 3.2f;
+            buildSpeed = 0.5f;
+            buildBeamOffset = 16f;
+
+            accel = 0.09f;
+            health = 21200f;
+            armor = 8f;
+            hitSize = 35f;
+            engineOffset = 7f;
+            engineSize = 0f;
+            itemCapacity = 0;
+            useEngineElevation = false;
+            constructor = ElevationMoveUnit::create;
+
+            abilities.add(new MoveEffectAbility(6.5f, -12.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-6.5f, -12.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(13f, -4.75f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-13f, -4.75f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
+            abilities.add(new MoveEffectAbility(12.75f, 5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-12.75f, 5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
+
+            parts.add(
+                    new HoverPart(){{
+                        x = 6.5f;
+                        y = -12.5f;
+                        mirror = true;
+                        radius = 20f;
+                        phase = 110f;
+                        stroke = 5f;
+                        layerOffset = -0.001f;
+                        color = EternityPal.viraColor;
+                    }},
+                    new HoverPart(){{
+                        x = 13f;
+                        y = -4.75f;
+                        mirror = true;
+                        radius = 20f;
+                        phase = 110f;
+                        stroke = 5f;
+                        layerOffset = -0.001f;
+                        color = EternityPal.viraColor;
+                    }},
+                    new HoverPart(){{
+                        x = 12.75f;
+                        y = 5.5f;
+                        mirror = true;
+                        radius = 20f;
+                        phase = 110f;
+                        stroke = 5f;
+                        layerOffset = -0.001f;
+                        color = EternityPal.viraColor;
+                    }});
         }};
         mionDrone = new StellarUnit("mion-drone"){{
             constructor = UnitEntity::create;
