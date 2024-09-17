@@ -178,7 +178,7 @@ public class EternityUnits {
             speed = 0.95f;
             rotateSpeed = 2.85f;
             health = 245;
-            armor = 1f;
+            armor = 5f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(25 - 32f, 7 - 32f, 14, 14), new Rect(25 - 32f, 43 - 32f, 14, 18)};
             parts.add(new FlarePart(){{
@@ -233,7 +233,7 @@ public class EternityUnits {
             speed = 0.8f;
             rotateSpeed = 2.7f;
             health = 655;
-            armor = 2f;
+            armor = 8f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(29 - 39f, 6 - 39f, 20, 65)};
         }};
@@ -245,7 +245,7 @@ public class EternityUnits {
             speed = 0.67f;
             rotateSpeed = 2.485f;
             health = 1460;
-            armor = 4f;
+            armor = 11f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(28 - 54f, 9 - 54f, 14, 15), new Rect(43 - 54f, 88 - 54f, 11, 12)};
         }};
@@ -257,7 +257,7 @@ public class EternityUnits {
             speed = 0.55f;
             rotateSpeed = 2.35f;
             health = 4790;
-            armor = 7f;
+            armor = 15f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(32 - 71f, 19 - 71f, 21, 24), new Rect(49 - 71f, 84 - 71f, 13, 48) };
         }};
@@ -268,7 +268,7 @@ public class EternityUnits {
             speed = 0.38f;
             rotateSpeed = 2.1f;
             health = 18760;
-            armor = 10f;
+            armor = 20f;
             itemCapacity = 0;
             targetAir = false;
             treadRects = new Rect[]{new Rect(30 - 113f, 38 - 113f, 28, 35), new Rect(92 - 113f, 24 - 113f, 21, 42), new Rect(75 - 113f, 161 - 113f, 38, 41)};
