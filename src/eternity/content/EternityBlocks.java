@@ -138,7 +138,7 @@ public class EternityBlocks {
             burnedGrass.asFloor().decoration = this;
         }};
         burnedTree = new TreeBlock("burned-tree"){{
-            variants = 1;
+            variants = 2;
         }};
         overheatStone = new Floor("overheat-stone");
         overheatStoneMagma = new Floor("overheat-stone-magma"){{
