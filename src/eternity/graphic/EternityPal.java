@@ -20,6 +20,8 @@ public class EternityPal {
     oblivionColor = Color.valueOf("f2a146"),
     darknessColor = Color.valueOf("832a91"),
     darkDarknessColor = Color.valueOf("591c6b"),
+    glareColor = Color.valueOf("f1778c"),
+    darkGlareColor = Color.valueOf("ba4773"),
     zyconColor = Color.valueOf("5fa1da"),
     grandColor = Color.valueOf("fc357f"),
     //Biotech's colors )

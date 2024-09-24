@@ -84,7 +84,7 @@ public class EternityBlocks {
             //payload
             plastMassConveyor, plastMassRouter, surgeMassConveyor, surgeMassRouter, smallMassDriver,
             //turrets
-            recall,
+            recall, glare,
             galaxyTurret, novaTurret, substanceBlaster, coreBlaster, coldPhasor, nexxonPhasor, poseidon, zyconStorm, grandBlaster, gloriousBlaster, despondence, viraHealer, sanctumBeacon,
             hope, lie, well,
             mionDroneBlock;
@@ -634,6 +634,34 @@ public class EternityBlocks {
             researchCostMultiplier = 0.3f;
 
             limitRange(2);
+        }};
+        glare = new PowerTurret("glare"){{
+            requirements(Category.turret,BuildVisibility.sandboxOnly, with());
+            shootType = new BasicBulletType(8f, 60){{
+                        width = 9f;
+                        height = 16f;
+                        ammoMultiplier = 7;
+                        lifetime = 30f;
+                        frontColor = EternityPal.glareColor;
+                        backColor = EternityPal.darkGlareColor;
+            }};
+
+            recoil = 1f;
+            size = 3;
+            shootY = -0.5f;
+            reload = 55f;
+            range = 240;
+            shoot.shots = 4;
+            shoot.shotDelay = 7;
+            shootCone = 35f;
+            ammoUseEffect = Fx.casing1;
+            health = 5890;
+            inaccuracy = 6f;
+            rotateSpeed = 11f;
+            coolant = consumeCoolant(0.12f);
+            drawer = new DrawTurret("ast-");
+            outlineColor = Color.valueOf("22262b");
+            connectedPower = false;
         }};
         novaTurret = new StellarPowerTurret("nova-turret"){{
             requirements(Category.turret, with(strontium, 45, gold, 40));

@@ -103,6 +103,24 @@ public class EternityUnits {
                     shootSound = Sounds.blaster;
                 }};
             }});
+            parts.add(new RegionPart("-engine"){{
+                          y = 0;
+                          layerOffset = -0.001F;
+                          under = true;
+                          mirror = outline = false;
+                          color = Color.valueOf("cb4848ff");
+                          colorTo = Pal.redderDust;
+                          progress = p -> Mathf.sinDeg(Time.time * 7f);
+                      }},
+                    new RegionPart("-engine2"){{
+                        y = 0;
+                        layerOffset = -0.001F;
+                        under = true;
+                        mirror = outline = false;
+                        color = Color.valueOf("ffffffe6");
+                        colorTo = Pal.redSpark;
+                        progress = p -> Mathf.sinDeg(Time.time * 7f);
+                    }});
         }};
         viraDrone = new StellarUnit("vira-drone"){{
             constructor = UnitEntity::create;
