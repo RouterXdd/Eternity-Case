@@ -33,7 +33,7 @@ public class Rift extends Block {
     public float effectChance = 0.05f;
     public Rift(String name) {
         super(name);
-        health = (int) (armor = 50000);
+        health = (int) (armor = Float.MAX_VALUE);
         solid = hasShadow = drawTeamOverlay = false;
         update = configurable = true;
         drawCracks = createRubble = false;
@@ -54,7 +54,7 @@ public class Rift extends Block {
         return new TextureRegion[]{riftRegion[0]};
     }
     public class RiftBuild extends Building {
-        float progress, changeProgress;
+        public float progress, changeProgress;
         int stage = 1;
 
         @Override

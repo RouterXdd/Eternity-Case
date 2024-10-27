@@ -2,12 +2,16 @@ package eternity.content;
 
 
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
 import arc.math.Interp.*;
 import arc.struct.Seq;
 import eternity.classes.blocks.defence.AdvRadar;
+import eternity.classes.blocks.defence.Nullifier;
 import eternity.classes.blocks.distribution.CapRegionDuct;
 import eternity.classes.blocks.defence.StellarWall;
 import eternity.classes.blocks.environment.*;
+import eternity.classes.blocks.storage.CoreFrost;
 import eternity.classes.blocks.units.Rift;
 import eternity.classes.blocks.power.OverheatGenerator;
 import eternity.classes.blocks.production.*;
@@ -16,18 +20,19 @@ import eternity.classes.blocks.turrets.*;
 import eternity.classes.blocks.units.PlaceUnitBlock;
 import eternity.graphic.EternityPal;
 import mindustry.content.*;
+import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.pattern.*;
+import mindustry.gen.Bullet;
 import mindustry.gen.Sounds;
 import mindustry.graphics.CacheLayer;
-import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.*;
 import mindustry.type.unit.*;
 import mindustry.world.Block;
-import mindustry.world.blocks.defense.Radar;
 import mindustry.world.blocks.defense.turrets.*;
+import mindustry.world.blocks.distribution.DuctBridge;
 import mindustry.world.blocks.distribution.DuctRouter;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.payloads.*;
@@ -40,8 +45,11 @@ import mindustry.world.consumers.ConsumeItemRadioactive;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 
+import static arc.graphics.g2d.Draw.alpha;
+import static arc.graphics.g2d.Draw.color;
+import static arc.math.Angles.randLenVectors;
 import static eternity.content.EtLiquids.*;
-import static eternity.content.EternityUnits.*;
+import static eternity.content.EtUnits.*;
 import static mindustry.Vars.*;
 import static mindustry.content.StatusEffects.*;
 import static mindustry.content.UnitTypes.*;
@@ -50,7 +58,7 @@ import static eternity.content.EtItems.*;
 import static mindustry.content.Liquids.*;
 import static mindustry.type.ItemStack.*;
 
-public class EternityBlocks {
+public class EtBlocks {
     public static Block
             //environment
                 //Ruinex
@@ -60,25 +68,31 @@ public class EternityBlocks {
             overheatStone, overheatStoneMagma, overheatStoneWall, overheatStoneBoulder,
             nukeBasalt, nukeBasaltPollute, nukeBasaltWall, nukeBasaltBoulder,
             riftedStone, riftedStoneWall, riftedBoulder,
+                //Abotium
+            sharpslate, wardSharpslate, sharpslateWall, sharpslateBoulder,
                 //Stellar
             stellarMetal, stellarMetal1, stellarMetalLamp,
                 //Cult
                 //Misc
             digFloor1, digFloor2, digFloor3, digFloor4, digFloor5,
+            blueSnow, blueSnowWall, blueSnowBoulder,
+            altIceCrack, altIce, altIceWall, frostCoreZone, shallowFrostCoreZone, iceShatters,
             smallRift, malachiteCrystal,
             oreGold, oreStrontium, oreCosmicDust, orePalladium,
+            oreCobalt, oreSelenium, oreAnthracite,
             //crafting
             nissinForge, terraSmelter, steelFoundry, filter, glassFabricator, electronicWeaver, healingPress, plateForge,
             //power
             lightningNode, lightningTower, powerHub, stellarRTG, thermalReactor,
             //production
-            brokenDrill, cosmicExcavator,
+            brokenDrill, cosmicExcavator, frostyDrill, radiator,
             //defence
-            aegisBarrier, titanBarrier, infiniteFortress, techCenter, advancedRadar,
+            aegisBarrier, titanBarrier, infiniteFortress, techCenter, advancedRadar, nullifier,
             //storage
-            commandBase, commandCenter,
+            commandBase, commandCenter, commandStation, coreFrost,
             //distribution
-            stellarDuct, stellarRouter,
+            stellarDuct, stellarRouter, stellarBridge,
+            cobaltDuct,
             //liquid
             fragilePump,
             //payload
@@ -86,6 +100,7 @@ public class EternityBlocks {
             //turrets
             recall, glare,
             galaxyTurret, novaTurret, substanceBlaster, coreBlaster, coldPhasor, nexxonPhasor, poseidon, zyconStorm, grandBlaster, gloriousBlaster, despondence, viraHealer, sanctumBeacon,
+            gale,
             hope, lie, well,
             mionDroneBlock;
     public static void load(){
@@ -174,11 +189,30 @@ public class EternityBlocks {
             variants = 2;
             nukeBasalt.asFloor().decoration = this;
         }};
-        riftedStone = new Floor("rifted-stone");
-        riftedStoneWall = new StaticWall("rifted-stone-wall");
+        riftedStone = new Floor("rifted-stone"){{
+            variants = 4;
+        }};
+        riftedStoneWall = new StaticWall("rifted-stone-wall"){{
+            variants = 4;
+        }};
         riftedBoulder = new Prop("rifted-boulder"){{
             variants = 2;
-            ruinSand.asFloor().decoration = this;
+            riftedStone.asFloor().decoration = this;
+        }};
+        sharpslate = new Floor("sharpslate"){{
+            variants = 4;
+        }};
+        wardSharpslate = new Floor("ward-sharpslate"){{
+            variants = 4;
+            blendGroup = sharpslate;
+        }};
+        sharpslateWall = new StaticWall("sharpslate-wall"){{
+            variants = 4;
+            wardSharpslate.asFloor().decoration = this;
+        }};
+        sharpslateBoulder = new Prop("sharpslate-boulder"){{
+            variants = 2;
+            sharpslate.asFloor().decoration = this;
         }};
         stellarMetal = new Floor("stellar-metal", 0){{
             mapColor = Color.valueOf("2e2f34");
@@ -201,6 +235,47 @@ public class EternityBlocks {
             variants = 0;
             canShadow = false;
         }};
+        blueSnow = new Floor("blue-snow"){{
+            variants = 4;
+        }};
+        blueSnowWall = new StaticWall("blue-snow-wall"){{
+            variants = 4;
+        }};
+        blueSnowBoulder = new Prop("blue-snow-boulder"){{
+            variants = 2;
+            ruinSand.asFloor().decoration = this;
+        }};
+        altIceCrack = new Floor("alt-ice-crack"){{
+            dragMultiplier = 0.4f;
+            speedMultiplier = 0.9f;
+            attributes.set(Attribute.water, 0.4f);
+        }};
+        altIce = new Floor("alt-ice"){{
+            variants = 4;
+            dragMultiplier = 0.4f;
+            speedMultiplier = 0.9f;
+            attributes.set(Attribute.water, 0.4f);
+            altIceCrack.asFloor().blendGroup = this;
+        }};
+        altIceWall = new StaticWall("alt-ice-wall"){{
+            variants = 4;
+        }};
+        frostCoreZone = new Floor("frost-core-zone", 0){{
+            allowCorePlacement = true;
+        }};
+        shallowFrostCoreZone = new Floor("shallow-frost-core-zone", 0){{
+            allowCorePlacement = true;
+            speedMultiplier = 0.8f;
+            status = StatusEffects.wet;
+            statusDuration = 50f;
+            liquidDrop = water;
+            liquidMultiplier = 0.6f;
+            isLiquid = true;
+            shallow = true;
+            cacheLayer = CacheLayer.water;
+            mapColor = Color.valueOf("688ec2");
+        }};
+        iceShatters = new OverlayFloor("ice-shatters");
         smallRift = new Rift("small-rift"){{
             requirements(Category.effect,BuildVisibility.sandboxOnly, with());
             size = 3;
@@ -250,6 +325,9 @@ public class EternityBlocks {
         oreStrontium = new OreBlock(strontium);
         oreCosmicDust = new OreBlock(cosmicDust);
         orePalladium = new OreBlock(oxidePalladium);
+        oreCobalt = new OreBlock(cobalt);
+        oreSelenium = new OreBlock(selenium);
+        oreAnthracite = new OreBlock(anthracite);
         nissinForge = new GenericCrafter("nissin-forge"){{
             requirements(Category.crafting, with(copper, 90, silicon, 65, plastanium, 20));
             outputItems = with(nissin, 2);
@@ -265,7 +343,7 @@ public class EternityBlocks {
         }};
         terraSmelter = new NuclearCrafter("terra-smelter"){{
             requirements(Category.crafting, with(silicon, 145, thorium, 90, titanium, 75, plastanium, 60, nissin, 110));
-            craftEffect = EternityFx.terraCraft;
+            craftEffect = EtFx.terraCraft;
             outputItems = with(surgeAlloy, 3, titanium, 2, lead, 2);
             craftTime = 110f;
             size = 3;
@@ -448,12 +526,23 @@ public class EternityBlocks {
             drillTime = 400;
             range = 9;
             size = 3;
-            oreMultipler = 0.55f;
-            solidMultipler = 0.8f;
+            oreMultipler = 0.75f;
+            solidMultipler = 0.7f;
             liquidBoostIntensity = 1.8f;
 
             consumeLiquid(water, 0.15f).boost();
             consumePower(4f);
+        }};
+        frostyDrill = new FrostyDrill("frosty-drill"){{
+            requirements(Category.production, with(cobalt, 10, selenium, 5));
+            tier = 2;
+            drillTime = 450;
+            size = 2;
+            researchCost = with(cobalt, 40, selenium, 20);
+            liquidBoostIntensity = 1;
+        }};
+        radiator = new GroundHeater("radiator"){{
+            requirements(Category.production, with(cobalt, 45, anthracite, 30));
         }};
         titanBarrier = new StellarWall("titan-barrier"){{
             requirements(Category.defense, BuildVisibility.sandboxOnly, with(strontium, 80));
@@ -461,6 +550,7 @@ public class EternityBlocks {
             size = 2;
             armor = 3;
             hitsRequire = 0;
+            researchCostMultiplier = 0.55f;
         }};
         aegisBarrier = new StellarWall("aegis-barrier"){{
             requirements(Category.defense, with(strontium, 80));
@@ -469,7 +559,7 @@ public class EternityBlocks {
             hitsRequire = 750;
             upgradeBlock = titanBarrier;
             buildCostMultiplier = 0.5f;
-            researchCostMultiplier = 0.5f;
+            researchCostMultiplier = 0.3f;
         }};
         infiniteFortress = new StellarWall("infinite-fortress"){{
             requirements(Category.defense, with(steel, 130, platePart, 55));
@@ -488,6 +578,13 @@ public class EternityBlocks {
             size = 2;
 
             consumePower(1.5f);
+        }};
+        nullifier = new Nullifier("nullifier"){{
+            requirements(Category.effect, with(strontium, 280, gold, 210, steel, 180, electronicPart, 90));
+            fogRadius = (int) range;
+            size = 3;
+
+            consumePower(9f);
         }};
 
         commandBase = new CommandCore("command-base"){{
@@ -522,17 +619,44 @@ public class EternityBlocks {
                     new CommandCoreUnit(quasar, 3)
             );
         }};
+        coreFrost = new CoreFrost("core-frost"){{
+            requirements(Category.effect,  with(cobalt, 900, selenium, 300));
+            alwaysUnlocked = true;
+
+            isFirstTier = true;
+            unitType = frostDrone;
+            health = 1100;
+            itemCapacity = 1500;
+            size = 3;
+
+            unitCapModifier = 6;
+        }};
+        stellarBridge = new DuctBridge("stellar-bridge"){{
+            requirements(Category.distribution, with(strontium, 10, gold, 4));
+            health = 100;
+            speed = 2.25f;
+            buildCostMultiplier = 2f;
+            researchCostMultiplier = 0.35f;
+        }};
         stellarDuct = new CapRegionDuct("stellar-duct"){{
             requirements(Category.distribution, with(strontium, 1));
             health = 140;
             speed = 4.5f;
             researchCost = with(strontium, 10);
+            bridgeReplacement = stellarBridge;
         }};
         stellarRouter = new DuctRouter("stellar-router"){{
             requirements(Category.distribution, with(strontium, 8));
             squareSprite = false;
             health = 130;
             speed = 4.5f;
+        }};
+        cobaltDuct = new CapRegionDuct("cobalt-duct"){{
+            requirements(Category.distribution, with(cobalt, 1));
+            health = 140;
+            speed = 5.5f;
+            researchCost = with(cobalt, 30);
+            bridgeReplacement = stellarBridge;
         }};
         fragilePump = new Pump("fragile-pump"){{
             requirements(Category.liquid, with(strontium, 10, steel, 8));
@@ -665,7 +789,7 @@ public class EternityBlocks {
         }};
         novaTurret = new StellarPowerTurret("nova-turret"){{
             requirements(Category.turret, with(strontium, 45, gold, 40));
-            shootType = new BasicBulletType(8f, 18.5f){{
+            shootType = new BasicBulletType(8f, 12f){{
                 width = 6f;
                 height = 16f;
                 lifetime = 12.5f;
@@ -691,7 +815,7 @@ public class EternityBlocks {
         }};
         coreBlaster = new StellarPowerTurret("core-blaster"){{
             requirements(Category.turret, with(strontium, 35, gold, 50));
-            shootType = new BasicBulletType(8f, 35){{
+            shootType = new BasicBulletType(8f, 28){{
                 width = 8f;
                 height = 8f;
                 splashDamage = 15;
@@ -719,7 +843,7 @@ public class EternityBlocks {
         coldPhasor = new StellarPowerTurret("cold-phasor"){{
             requirements(Category.turret, BuildVisibility.sandboxOnly, with(strontium, 65, gold, 40, steel, 25));
             shootType = new PointBulletType(){{
-                damage = 30;
+                damage = 24;
                 status = freezing;
                 statusDuration = 5 * 60;
                 lifetime = 15f;
@@ -772,7 +896,7 @@ public class EternityBlocks {
         nexxonPhasor = new StellarPowerTurret("nexxon-phasor"){{
             requirements(Category.turret, with(strontium, 65, gold, 40, steel, 25));
             shootType = new PointBulletType(){{
-                damage = 20;
+                damage = 15;
                 lifetime = 15f;
                 trailInterval = 100f;
                 trailEffect = new MultiEffect(
@@ -844,7 +968,7 @@ public class EternityBlocks {
             coolant = consumeCoolant(0.45f);
             consumePower(10f);
             shootType = new BasicBulletType(0f, 0){{
-                shootEffect = EternityFx.zyconMissileShoot;
+                shootEffect = EtFx.zyconMissileShoot;
                 smokeEffect = Fx.none;
                 shake = 1f;
                 speed = 0f;
@@ -908,7 +1032,7 @@ public class EternityBlocks {
             coolant = consumeCoolant(0.45f);
             consumePower(10f);
             shootType = new BasicBulletType(0f, 0){{
-                shootEffect = EternityFx.zyconMissileShoot;
+                shootEffect = EtFx.zyconMissileShoot;
                 smokeEffect = Fx.none;
                 shake = 1f;
                 speed = 0f;
@@ -955,7 +1079,7 @@ public class EternityBlocks {
             recoil = 2.5f;
             reload = 48f;
             shake = 2f;
-            shootEffect = EternityFx.grandLaserShoot;
+            shootEffect = EtFx.grandLaserShoot;
             smokeEffect = Fx.none;
             size = 3;
             shootRequire = 0;
@@ -983,7 +1107,7 @@ public class EternityBlocks {
             recoil = 2f;
             reload = 65f;
             shake = 2f;
-            shootEffect = EternityFx.grandLaserShoot;
+            shootEffect = EtFx.grandLaserShoot;
             smokeEffect = Fx.none;
             size = 3;
             upgradeBlock = gloriousBlaster;
@@ -1171,6 +1295,46 @@ public class EternityBlocks {
             shootSound = Sounds.blaster;
             consumePower(2.6f);
         }};
+        gale = new LiquidTurret("gale"){{
+            requirements(Category.turret, with(cobalt, 80, selenium, 35));
+            ammo(
+                    helium,new BasicBulletType(5, 6){{
+                        knockback = 2.5f;
+                        drag = 0.002f;
+                        lifetime = 32;
+                        trailEffect = despawnEffect = hitEffect = new Effect(50f, e -> {
+                            color(helium.color);
+                            alpha(e.fout());
+
+                            randLenVectors(e.id, 4, 2f + e.finpow() * 5f, (x, y) -> {
+                                Fill.circle(e.x + x, e.y + y, 1f + e.fin() * 4f);
+                            });
+                        });
+                        trailInterval = 2;
+                        ammoMultiplier = 1;
+                    }
+                        @Override
+                        public void draw(Bullet b){
+                            Draw.color(helium.color, Color.white, b.fout() / 100f);
+                            Fill.circle(b.x, b.y, 3);
+                            Draw.reset();
+                        }
+                    }
+            );
+            drawer = new DrawTurret("stellar-");
+            shoot.shots = 4;
+            velocityRnd = 0.5f;
+            extinguish = false;
+            size = 2;
+            recoil = 2f;
+            reload = 30f;
+            inaccuracy = 10f;
+            shootCone = 35f;
+            liquidCapacity = 5f;
+            shootEffect = Fx.none;
+            range = 160f;
+            scaledHealth = 120;
+        }};
         hope = new ItemTurret("hope"){{
             requirements(Category.turret, with(graphite, 35, silicon, 20));
             ammo(
@@ -1208,7 +1372,7 @@ public class EternityBlocks {
                         damage = 30;
                         ammoMultiplier = 2;
                         lifetime = 20f;
-                        trailEffect = EternityFx.cultTrail;
+                        trailEffect = EtFx.cultTrail;
                         trailInterval = 4;
                         pierceArmor = true;
                         trailSpacing = 5;
@@ -1233,7 +1397,7 @@ public class EternityBlocks {
                         splashDamageRadius = 12;
                         ammoMultiplier = 1.5f;
                         lifetime = 25f;
-                        trailEffect = EternityFx.cultTrail;
+                        trailEffect = EtFx.cultTrail;
                         trailInterval = 4;
                         pierceArmor = true;
                         trailSpacing = 5;

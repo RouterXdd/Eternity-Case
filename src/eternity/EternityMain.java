@@ -1,13 +1,7 @@
 package eternity;
 
-import arc.*;
-import arc.util.*;
 import eternity.content.*;
-import mindustry.game.EventType.*;
 import mindustry.mod.*;
-import mindustry.ui.dialogs.*;
-
-import static mindustry.Vars.mods;
 
 public class EternityMain extends Mod{
 
@@ -17,14 +11,16 @@ public class EternityMain extends Mod{
 
     @Override
     public void loadContent(){
-        EternityTechTreeRoots.load();
+        EtTechTreeRoots.load();
+        EtAttributes.load();
         EtStatuses.load();
         EtLiquids.load();
         EtItems.load();
-        EternityUnits.load();
-        EternityBlocks.load();
+        EtUnits.load();
+        EtBlocks.load();
+        EtSchematics.load();
         EtPlanets.load();
-        EternitySectors.load();
+        EtSectors.load();
         RuinexTechTree.load();
     }
 

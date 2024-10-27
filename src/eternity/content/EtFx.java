@@ -2,7 +2,6 @@ package eternity.content;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
@@ -13,7 +12,7 @@ import mindustry.graphics.*;
 import static arc.graphics.g2d.Draw.color;
 import static mindustry.Vars.tilesize;
 
-public class EternityFx {
+public class EtFx {
     public static final Rand rand = new Rand();
     public static final Vec2 v = new Vec2();
 

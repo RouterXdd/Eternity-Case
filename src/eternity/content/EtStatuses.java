@@ -9,7 +9,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.StatusEffect;
 
 public class EtStatuses {
-    public static StatusEffect enrage, detected, infected, ghosted;
+    public static StatusEffect enrage, detected, infected, ghosted, ancientEMP;
     public static void load(){
         enrage = new StatusEffect("enrage"){{
             color = EternityPal.oblivionColor;
@@ -17,7 +17,7 @@ public class EtStatuses {
             damageMultiplier = 1.3f;
             permanent = true;
             applyEffect = new MultiEffect(
-                    EternityFx.enrageSpikes,
+                    EtFx.enrageSpikes,
                     new WaveEffect(){{
                         sizeTo = 110;
                         lifetime = 65;
@@ -35,6 +35,14 @@ public class EtStatuses {
         }};
         ghosted = new GhostStatusEffect("ghosted"){{
             color = Color.valueOf("b25bdb");
+        }};
+        ancientEMP = new StatusEffect("ancient-emp"){{
+            color = Color.valueOf("f2e878");
+            damageMultiplier = 0f;
+            reloadMultiplier = 0f;
+            speedMultiplier = 0f;
+            buildSpeedMultiplier = 0f;
+            disarm = true;
         }};
     }
 }

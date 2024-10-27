@@ -5,7 +5,7 @@ import mindustry.content.StatusEffects;
 import mindustry.type.Liquid;
 
 public class EtLiquids {
-    public static Liquid corruptedWater;
+    public static Liquid corruptedWater, helium;
     public static void load() {
 
         corruptedWater = new Liquid("corrupted-water", Color.valueOf("2b213d")) {{
@@ -15,6 +15,9 @@ public class EtLiquids {
             boilPoint = 0.5f;
             gasColor = Color.valueOf("4d3a5b").a(0.8f);
             alwaysUnlocked = true;
+        }};
+        helium = new Liquid("helium", Color.valueOf("cb3d48")){{
+            gas = true;
         }};
     }
 }

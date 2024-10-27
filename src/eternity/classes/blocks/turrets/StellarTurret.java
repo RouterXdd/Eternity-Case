@@ -1,11 +1,10 @@
 package eternity.classes.blocks.turrets;
 
-import arc.scene.ui.layout.Table;
 import arc.util.Nullable;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import eternity.classes.type.EternityStats;
-import eternity.content.EternityFx;
+import eternity.content.EtFx;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.entities.bullet.BulletType;
@@ -14,7 +13,6 @@ import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.Turret;
-import mindustry.world.meta.Stat;
 
 import static mindustry.Vars.world;
 
@@ -58,7 +56,7 @@ public class StellarTurret extends Turret {
                         tile = world.tileWorld(x, y);
                     }
                     tile.setBlock(upgradeBlock, this.team);
-                    EternityFx.upgradeBlock.at(tile.drawx(), tile.drawy(), upgradeBlock.size);
+                    EtFx.upgradeBlock.at(tile.drawx(), tile.drawy(), upgradeBlock.size);
                 }
 
             } else if (shoots >= 1 && upgradeBlock != null) {
@@ -69,7 +67,7 @@ public class StellarTurret extends Turret {
                     tile = world.tileWorld(x, y);
                 }
                 tile.setBlock(upgradeBlock, this.team);
-                EternityFx.upgradeBlock.at(tile.drawx(), tile.drawy(), upgradeBlock.size);
+                EtFx.upgradeBlock.at(tile.drawx(), tile.drawy(), upgradeBlock.size);
             }
 
         }

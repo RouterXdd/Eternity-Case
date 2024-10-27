@@ -1,14 +1,13 @@
 package eternity.content;
 
 import arc.struct.Seq;
-import mindustry.content.Planets;
 import mindustry.game.Objectives.*;
 
 import static eternity.content.EtItems.*;
-import static eternity.content.EternityBlocks.*;
-import static eternity.content.EternitySectors.*;
-import static eternity.content.EternityTechTreeRoots.*;
-import static eternity.content.EternityUnits.*;
+import static eternity.content.EtBlocks.*;
+import static eternity.content.EtSectors.*;
+import static eternity.content.EtTechTreeRoots.*;
+import static eternity.content.EtUnits.*;
 import static mindustry.content.TechTree.*;
 import static mindustry.content.UnitTypes.*;
 
@@ -17,7 +16,9 @@ public class RuinexTechTree{
     EtPlanets.ruinex.techTree = nodeRoot("stellar", stellarRoot, () -> {
         node(stellarDuct, () ->{
             node(stellarRouter, () ->{
+                node(stellarBridge, () ->{
 
+                });
             });
         });
         node(commandBase, () ->{
@@ -45,7 +46,7 @@ public class RuinexTechTree{
 
             });
         });
-        node(steelFoundry, () ->{
+        node(steelFoundry, Seq.with(new OnSector(ruinShore)), () ->{
             node(filter, () ->{
                 node(glassFabricator, () ->{
                     node(electronicWeaver, () ->{
@@ -57,14 +58,14 @@ public class RuinexTechTree{
                 });
             });
         });
-        node(lightningNode, () ->{
+        node(lightningNode, Seq.with(new OnSector(ruinShore)), () ->{
             node(stellarRTG, () ->{
                 node(thermalReactor, () ->{
 
                 });
             });
         });
-        node(fragilePump, () ->{
+        node(fragilePump, Seq.with(new SectorComplete(ruinShore)), () ->{
 
         });
         node(novaTurret, () ->{
@@ -110,7 +111,9 @@ public class RuinexTechTree{
 
         });
         node(devaste, () ->{
+            node(ruinShore, Seq.with(new SectorComplete(devaste)), () ->{
 
+            });
         });
         nodeProduce(strontium, () ->{
             nodeProduce(gold, () ->{

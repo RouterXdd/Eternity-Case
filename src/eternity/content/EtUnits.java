@@ -29,17 +29,18 @@ import mindustry.type.unit.*;
 import mindustry.type.weapons.RepairBeamWeapon;
 import mindustry.world.meta.Env;
 
+import static eternity.content.EtStatuses.*;
 import static mindustry.Vars.tilesize;
 import static mindustry.type.ItemStack.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.StatusEffects.*;
 import static eternity.content.EtItems.*;
 
-public class EternityUnits {
+public class EtUnits {
             //Random units
     public static UnitType
             //stellar units
-            coreDrone, viraDrone,
+            coreDrone, viraDrone, frostDrone,
             star, constellation, accumulation, starfall, space,
             commander, overseer, overlord, emperor, kingdom,
             barricade, shield, barrier, border, dome,
@@ -47,14 +48,17 @@ public class EternityUnits {
             mionDrone, viraSavior, oblivion,
             //Stellar rift units
             infectedMionDrone, infectedMionDroneL, infectedMionDroneXL, electron, proton, neutron, atom,
+            //Stellar encycle units
+            mistake, bug, exploit,
+            mineral, geode, gem,
             //cult units
             fault,
             //random units
-            clear, tyranny, sandStorm, aquarion, bloodwave, liquidShock, aphelops, cultura, abyss,
+            clear, tyranny, sandStorm, aquarion, bloodwave, liquidShock, aphelops, cultura, abyss, radiance,
             //defiance ported units
             pain,
             spinor;
-    public static BulletType oblivionBullet;
+    public static BulletType oblivionBullet, ancientBomb;
     public static void load(){
         oblivionBullet = new BasicBulletType(6.5f, 80){{
             width = 16f;
@@ -63,6 +67,27 @@ public class EternityUnits {
             sprite = "eternity-case-laser-blast";
             backColor = EternityPal.oblivionColor;
             shootEffect = smokeEffect = Fx.none;
+        }};
+        ancientBomb = new BasicBulletType(7f, 300){{
+            width = 12f;
+            height = 12f;
+            hitSize = 18;
+            splashDamage = 250;
+            splashDamageRadius = 8 * 10;
+            lifetime = 80f;
+            sprite = "eternity-case-sphere";
+            backColor = Color.valueOf("f2e878");
+            shootEffect = smokeEffect = Fx.none;
+            despawnHit = true;
+            hitEffect = new MultiEffect(
+                    new WaveEffect(){{
+                        sizeFrom = sizeTo = splashDamageRadius;
+                        lifetime = 65;
+                        colorFrom = colorTo = Color.valueOf("f2e878");
+                        strokeFrom = 4.5f;
+                        strokeTo = 0;
+                    }}
+            );
         }};
         coreDrone = new StellarUnit("core-drone"){{
             constructor = UnitEntity::create;
@@ -81,7 +106,7 @@ public class EternityUnits {
             fogRadius = 0f;
             itemCapacity = 20;
             health = 340f;
-            engineOffset = 4.5f;
+            engineSize = 0f;
             hitSize = 9f;
             alwaysUnlocked = true;
 
@@ -118,7 +143,7 @@ public class EternityUnits {
                         under = true;
                         mirror = outline = false;
                         color = Color.valueOf("ffffffe6");
-                        colorTo = Pal.redSpark;
+                        colorTo = Color.valueOf("ffffff");
                         progress = p -> Mathf.sinDeg(Time.time * 7f);
                     }});
         }};
@@ -188,6 +213,69 @@ public class EternityUnits {
                 }};
             }});
         }};
+        frostDrone = new StellarUnit("frost-drone"){{
+            constructor = UnitEntity::create;
+            aiController = BuilderAI::new;
+            isEnemy = false;
+
+            lowAltitude = true;
+            flying = true;
+            mineSpeed = 3f;
+            mineTier = 2;
+            buildSpeed = 0.6f;
+            drag = 0.06f;
+            speed = 2.2f;
+            rotateSpeed = 10f;
+            accel = 0.1f;
+            fogRadius = 0f;
+            itemCapacity = 20;
+            health = 300f;
+            engineSize = 0f;
+            hitSize = 9f;
+            alwaysUnlocked = true;
+            immunities.add(freezing);
+
+            weapons.add(new Weapon("none-weapon"){{
+                reload = 35f;
+                x = 0f;
+                y = 2.75f;
+                top = false;
+                ejectEffect = Fx.none;
+
+                bullet = new BasicBulletType(5f, 20){{
+                    width = 8f;
+                    height = 8f;
+                    splashDamage = 5;
+                    splashDamageRadius = 8 * 5;
+                    status = freezing;
+                    statusDuration = 60 * 3.5f;
+                    lifetime = 20f;
+                    sprite = "eternity-case-sphere";
+                    backColor = Color.valueOf("75b1cb");
+                    shootEffect = smokeEffect = Fx.none;
+                    buildingDamageMultiplier = 0.01f;
+                    shootSound = Sounds.blaster;
+                }};
+            }});
+            parts.add(new RegionPart("-engine"){{
+                          y = 0;
+                          layerOffset = -0.001F;
+                          under = true;
+                          mirror = outline = false;
+                          color = Color.valueOf("54769c");
+                          colorTo = Color.valueOf("75b1cb");
+                          progress = p -> Mathf.sinDeg(Time.time * 7f);
+                      }},
+                    new RegionPart("-engine2"){{
+                        y = 0;
+                        layerOffset = -0.001F;
+                        under = true;
+                        mirror = outline = false;
+                        color = Color.valueOf("ffffffe6");
+                        colorTo = Color.valueOf("ffffff");
+                        progress = p -> Mathf.sinDeg(Time.time * 7f);
+                    }});
+        }};
 
         star = new StellarTankUnit("star"){{
             constructor = TankUnit::create;
@@ -254,6 +342,36 @@ public class EternityUnits {
             armor = 8f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(29 - 39f, 6 - 39f, 20, 65)};
+            weapons.add(new Weapon("eternity-case-constellation-weapon"){{
+                layerOffset = 0.0001f;
+                reload = 190f;
+                shootY = 5f;
+                recoil = 1f;
+                rotate = true;
+                rotateSpeed = 3f;
+                mirror = false;
+                x = 0f;
+                y = 0f;
+                heatColor = Color.valueOf("f9350f");
+                cooldownTime = 190f;
+                continuous = alwaysContinuous = true;
+                shootSound = Sounds.beam;
+                bullet = new ContinuousLaserBulletType(){{
+                    damage = 8.5f;
+                    length = 70f;
+                    width = 3;
+                    hitEffect = Fx.hitMeltdown;
+                    drawSize = 50f;
+                    lifetime = 160f;
+                    shake = 0.2f;
+                    despawnEffect = Fx.smokeCloud;
+                    smokeEffect = Fx.none;
+                    pierceCap = 2;
+                    incendChance = 0f;
+
+                    colors = new Color[]{Color.valueOf("dcda5b").cpy().a(.2f), Color.valueOf("dcda5b").cpy().a(.5f), Color.valueOf("dcda5b").cpy().mul(1.2f), Color.white};
+                }};
+            }});
         }};
         //TODO
         accumulation = new StellarTankUnit("accumulation"){{
@@ -928,6 +1046,66 @@ public class EternityUnits {
                         }};
                     }});
         }};
+        mistake = new StellarUnit("mistake"){{
+            speed = 0.6f;
+            drag = 0.07f;
+            hitSize = 11f;
+            health = 380;
+            accel = 0.3f;
+            rotateSpeed = 2.5f;
+            faceTarget = false;
+            constructor = UnitWaterMove::create;
+            canBoost = true;
+            boostMultiplier = 0.75f;
+            engineOffset = 6f;
+            engineSize = 2.5f;
+
+            armor = 2f;
+            weapons.add(new Weapon("eternity-case-mistake-weapon"){{
+                reload = 40f;
+                x = 0;
+                top = mirror = false;
+                rotate = true;
+                shootCone = 50;
+                ejectEffect = Fx.none;
+                bullet = new MissileBulletType(3.3f, 10){{
+                    homingPower = 0.1f;
+                    weaveMag = 3;
+                    weaveScale = 3;
+                    lifetime = 40f;
+                    shootEffect = Fx.none;
+                    smokeEffect = Fx.none;
+                    splashDamage = 5f;
+                    splashDamageRadius = 20f;
+                    frontColor = Color.white;
+                    hitSound = Sounds.none;
+                    width = height = 6f;
+
+                    lightColor = trailColor = backColor = Pal.techBlue;
+                    lightRadius = 20f;
+                    lightOpacity = 0.5f;
+
+                    trailWidth = 2.2f;
+                    trailLength = 12;
+                    trailChance = -1f;
+                    despawnSound = Sounds.dullExplosion;
+
+                    despawnEffect = Fx.none;
+                    hitEffect = new ExplosionEffect(){{
+                        lifetime = 20f;
+                        waveStroke = 2f;
+                        waveColor = sparkColor = trailColor;
+                        waveRad = 8f;
+                        smokeSize = 0f;
+                        smokeSizeBase = 0f;
+                        sparks = 6;
+                        sparkRad = 20f;
+                        sparkLen = 3f;
+                        sparkStroke = 1.5f;
+                    }};
+                }};
+            }});
+        }};
         fault = new UnitType("fault"){{
             speed = 1.15f;
             drag = 0.4f;
@@ -1196,7 +1374,7 @@ public class EternityUnits {
                         reload = 190f;
                         shootSound = Sounds.plantBreak;
                         bullet = new BulletType(){{
-                            shootEffect = new MultiEffect(Fx.shootBig, EternityFx.bloodMissileShoot);
+                            shootEffect = new MultiEffect(Fx.shootBig, EtFx.bloodMissileShoot);
                             smokeEffect = Fx.shootBigSmoke2;
                             shake = 1f;
                             speed = 0f;
@@ -1591,6 +1769,147 @@ public class EternityUnits {
             }});
 
             outlineColor = Color.valueOf("000000");
+        }};
+        radiance = new ErekirUnitType("radiance"){{
+            constructor = UnitEntity::create;
+
+            lowAltitude = true;
+            flying = true;
+            drag = 0.2f;
+            speed = 0.3f;
+            rotateSpeed = 2f;
+            itemCapacity = 1000;
+            health = 4500000f;
+            armor = 140;
+            engineOffset = 46.5f;
+            engineSize = 25f;
+            engineColor = Color.valueOf("f2e878");
+            hitSize = 110f;
+            drawCell = false;
+            outlineRadius = 5;
+            outlineColor = Color.valueOf("1b1b1e");
+            weapons.add(new Weapon("eternity-case-radiance-small-weapon"){{
+                top = rotate = true;
+                shootY = 4f;
+                reload = 70f;
+                ejectEffect = Fx.none;
+                recoil = 2f;
+                rotateSpeed = 1.25f;
+                y = 34;
+                x = 55.25f;
+                shootSound = Sounds.pulseBlast;
+                bullet = ancientBomb;
+            }},
+            new Weapon("eternity-case-radiance-small-weapon"){{
+                top = rotate = true;
+                shootY = 4f;
+                reload = 70f;
+                ejectEffect = Fx.none;
+                recoil = 2f;
+                rotateSpeed = 1.25f;
+                y = 44.75f;
+                x = -83.5f;
+                shootSound = Sounds.pulseBlast;
+                bullet = ancientBomb;
+            }},
+            new Weapon("eternity-case-radiance-weapon"){{
+                top = rotate = true;
+                shootY = 9.25f;
+                reload = 25f;
+                ejectEffect = Fx.none;
+                recoil = 2f;
+                rotateSpeed = 1.8f;
+                y = -33.5f;
+                x = 63.5f;
+                shoot = new ShootAlternate(){{
+                    shots = 8;
+                    shotDelay = 6;
+                    spread = 6;
+                }};
+                bullet = new BasicBulletType(10f, 200){{
+                    width = 12f;
+                    height = 20f;
+                    lifetime = 60f;
+                    pierceArmor = pierceBuilding = true;
+                    pierceCap = 2;
+                    backColor = frontColor = trailColor = Color.valueOf("f2e878");
+                    shootEffect = smokeEffect = Fx.none;
+                    shootSound = Sounds.shockBlast;
+                    trailWidth = 3;
+                    trailLength = 22;
+                }};
+            }},
+            new Weapon("eternity-case-radiance-main-weapon"){{
+                top = rotate = false;
+                shootY = 0f;
+                reload = 780;
+                ejectEffect = Fx.none;
+                shootCone = 360;
+                recoil = 0;
+                y = 47.5f;
+                x = 0;
+                bullet = new BasicBulletType(0, 0){{
+                    width = 0;
+                    height = 0f;
+                    lifetime = 1f;
+                    damage = 0.00000001f;
+                    pierceArmor = pierceBuilding = pierce = true;
+                    splashDamageRadius = 20 * 60;
+                    status = ancientEMP;
+                    statusDuration = 320;
+                    shootEffect = new MultiEffect(
+                            new WaveEffect(){{
+                                sizeFrom = 0;
+                                sizeTo = splashDamageRadius;
+                                lifetime = 30;
+                                colorFrom = colorTo = Color.valueOf("f2e878");
+                                strokeFrom = 6f;
+                                strokeTo = 0;
+                            }}
+                    );
+                }};
+                parts.add(
+                new ShapePart(){{
+                    circle = true;
+                    radius = stroke = 15f;
+                    radiusTo = strokeTo = 0;
+                    color = Color.valueOf("f2e878");
+                    colorTo = Color.valueOf("00000000");
+                    progress = PartProgress.reload;
+                }},
+                new HaloPart(){{
+                    progress = PartProgress.reload;
+                    color = Pal.accent;
+                    colorTo = Color.valueOf("00000000");
+                    layer = Layer.effect;
+
+                    rotateSpeed = 4f;
+                    shapes = 2;
+                    stroke = 1.5f;
+                    strokeTo = 0;
+                    triLength = 20f;
+                    triLengthTo = 0;
+                    haloRadius = radiusTo = 0f;
+                    tri = true;
+                    radius = 20f;
+                }},
+                new HaloPart(){{
+                    progress = PartProgress.reload;
+                    color = Pal.accent;
+                    colorTo = Color.valueOf("00000000");
+                    layer = Layer.effect;
+
+                    rotateSpeed = -4f;
+                    shapes = 2;
+                    stroke = 1.5f;
+                    strokeTo = 0;
+                    triLength = 20f;
+                    triLengthTo = 0;
+                    haloRadius = radiusTo = 0f;
+                    tri = true;
+                    radius = 20f;
+                }});
+            }});
         }};
         pain = new TankUnitType("pain"){{
             constructor = TankUnit::create;

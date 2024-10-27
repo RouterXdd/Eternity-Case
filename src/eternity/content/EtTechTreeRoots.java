@@ -3,7 +3,7 @@ package eternity.content;
 import mindustry.ctype.ContentType;
 import mindustry.ctype.UnlockableContent;
 
-public class EternityTechTreeRoots {
+public class EtTechTreeRoots {
     public static UnlockableContent
     miscRoot, stellarRoot, cultRoot;
     public static void load(){

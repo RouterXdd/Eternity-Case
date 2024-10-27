@@ -175,20 +175,20 @@ public class AdvWeapon extends Weapon {
 
         if (bullet instanceof NotLethalBasicBulletType b) {
             t.row();
-            t.add("[lightgray]" + Core.bundle.get("stat.notlethal"));
+            t.add(Core.bundle.get("bullet.notlethal"));
         }
         if (bullet instanceof AdvBasicBulletType b) {
             if (b.ghosts) {
                 t.row();
-                t.add("[lightgray]" + Core.bundle.get("stat.ghosts"));
+                t.add(Core.bundle.get("bullet.ghosts"));
             }
             if (b.leechPercent > 0) {
                 t.row();
-                t.add("[lightgray]" + Strings.autoFixed(b.leechPercent, 2) + Core.bundle.get("bullet.leechpercent"));
+                t.add("[accent]" + Strings.autoFixed(b.leechPercent, 2) + Core.bundle.get("bullet.leechpercent"));
             }
             if (b.leechAmount > 0) {
                 t.row();
-                t.add("[lightgray]" + Strings.autoFixed(b.leechAmount, 2) + Core.bundle.get("bullet.leechamount"));
+                t.add("[accent]" + Strings.autoFixed(b.leechAmount, 2) + Core.bundle.get("bullet.leechamount"));
             }
         }
     }

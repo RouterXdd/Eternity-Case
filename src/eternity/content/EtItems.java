@@ -13,10 +13,12 @@ public class EtItems {
     //stellar
     ruinSandItem, gold, strontium, steel, heatproofGlass, cosmicDust, oxidePalladium, palladium, electronicPart, repairPart, laserPart, platePart, launchPart, darknessPart,
     //cult
-    expPlast,
+    expPlast, wardCapsule, voidAlloy,
     //misc
-    nissin;
-    public static final Seq<Item> ruinexItems = new Seq<>(), abotiumItems = new Seq<>();
+    nissin,
+            //Encycle
+    cobalt, selenium, anthracite;
+    public static final Seq<Item> ruinexItems = new Seq<>(), abotiumItems = new Seq<>(), encycleItems = new Seq<>();
     public static void load() {
         //misc
         nissin = new Item("nissin", Color.valueOf("82863b")){{
@@ -71,13 +73,43 @@ public class EtItems {
             explosiveness = 1f;
             flammability = 0.65f;
         }};
+        wardCapsule = new Item("ward-capsule", Color.valueOf("47b199")){{
+            hardness = 1;
+            cost = 1.8f;
+            charge = 2f;
+            frames = 2;
+            transitionFrames = 10;
+        }};
+        voidAlloy = new Item("void-alloy", Color.valueOf("1a1a1a")){{
+            hardness = 1;
+            cost = 2.5f;
+        }};
+        //Misc: Encycle
+        cobalt = new Item("cobalt", Color.valueOf("75b1cb")){{
+            hardness = 1;
+            cost = 1.5f;
+            healthScaling = 0.8f;
+        }};
+        selenium = new Item("selenium", Color.valueOf("81be72")){{
+            hardness = 2;
+            cost = 1.1f;
+            explosiveness = 0.2f;
+        }};
+        anthracite = new Item("anthracite", Color.valueOf("4e4b4b")){{
+            hardness = 2;
+            cost = 1.5f;
+            flammability = 1.1f;
+        }};
         ruinexItems.addAll(
                 strontium, gold, ruinSandItem, steel, heatproofGlass, cosmicDust, oxidePalladium, palladium,
                 electronicPart, repairPart, laserPart, platePart, launchPart, darknessPart
 
         );
         abotiumItems.addAll(
-                plastanium, blastCompound, expPlast
+                plastanium, blastCompound, expPlast, voidAlloy
+        );
+        encycleItems.addAll(
+                cobalt, selenium, anthracite
         );
     }
 }

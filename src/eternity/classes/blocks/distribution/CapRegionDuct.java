@@ -1,8 +1,7 @@
 package eternity.classes.blocks.distribution;
 
 import arc.Core;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.g2d.*;
 import mindustry.gen.Building;
 import mindustry.world.blocks.distribution.Duct;
 

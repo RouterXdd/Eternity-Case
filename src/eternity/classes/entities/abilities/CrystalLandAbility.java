@@ -1,6 +1,6 @@
 package eternity.classes.entities.abilities;
 
-import eternity.content.EternityBlocks;
+import eternity.content.EtBlocks;
 import mindustry.content.Blocks;
 import mindustry.gen.Unit;
 import mindustry.world.Tile;
@@ -14,7 +14,7 @@ public class CrystalLandAbility extends AdvAbility{
         if(!net.client()) {
             Tile tile = world.tileWorld(unit.x, unit.y);
 
-            if (tile != null && tile.block() == Blocks.air) tile.setBlock(EternityBlocks.malachiteCrystal, unit.team);
+            if (tile != null && tile.block() == Blocks.air) tile.setBlock(EtBlocks.malachiteCrystal, unit.team);
         }
     }
 }

@@ -8,7 +8,7 @@ import mindustry.graphics.g3d.*;
 import mindustry.type.Planet;
 
 import static eternity.content.EtItems.*;
-import static eternity.content.EternityBlocks.*;
+import static eternity.content.EtBlocks.*;
 
 public class EtPlanets {
     public static Planet

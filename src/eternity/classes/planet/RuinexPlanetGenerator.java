@@ -5,13 +5,17 @@ import arc.math.*;
 import arc.math.geom.*;
 import arc.util.Tmp;
 import arc.util.noise.*;
+import eternity.content.EtSchematics;
 import mindustry.maps.generators.PlanetGenerator;
 import mindustry.world.Block;
 
-import static eternity.content.EternityBlocks.*;
+import static eternity.content.EtBlocks.*;
 
 public class RuinexPlanetGenerator extends PlanetGenerator {
     public float heightScl = 0.9f, octaves = 6, persistence = 0.7f, heightPow = 3f, heightMult = 1.5f;
+    {
+        defaultLoadout = EtSchematics.commBase;
+    }
 
     @Override
     public float getHeight(Vec3 position){
