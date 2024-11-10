@@ -24,6 +24,7 @@ import static mindustry.Vars.state;
 
 public class AdvWeapon extends Weapon {
     public float healthPercent = 100;
+    public boolean anywaysShoot = false;
     public AdvWeapon(String name){
         this.name = name;
     }
@@ -108,6 +109,7 @@ public class AdvWeapon extends Weapon {
         }
 
         if(alwaysShooting) mount.shoot = true;
+        if(anywaysShoot && unit.isShooting()) mount.shoot = true;
 
         //update continuous state
         if(continuous && mount.bullet != null){

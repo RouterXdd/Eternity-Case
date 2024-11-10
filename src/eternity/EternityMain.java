@@ -1,5 +1,7 @@
 package eternity;
 
+import eternity.classes.mod.Classification;
+import eternity.classes.mod.ClassificationMeta;
 import eternity.content.*;
 import mindustry.mod.*;
 
@@ -11,7 +13,7 @@ public class EternityMain extends Mod{
 
     @Override
     public void loadContent(){
-        EtTechTreeRoots.load();
+        Classification.init();
         EtAttributes.load();
         EtStatuses.load();
         EtLiquids.load();
@@ -22,6 +24,7 @@ public class EternityMain extends Mod{
         EtPlanets.load();
         EtSectors.load();
         RuinexTechTree.load();
+        ClassificationMeta.init();
     }
 
 }

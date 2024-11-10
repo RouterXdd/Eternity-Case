@@ -18,6 +18,7 @@ import eternity.classes.blocks.production.*;
 import eternity.classes.blocks.storage.CommandCore;
 import eternity.classes.blocks.turrets.*;
 import eternity.classes.blocks.units.PlaceUnitBlock;
+import eternity.classes.mod.ClassificationMeta;
 import eternity.graphic.EternityPal;
 import mindustry.content.*;
 import mindustry.entities.Effect;
@@ -32,6 +33,7 @@ import mindustry.type.*;
 import mindustry.type.unit.*;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.turrets.*;
+import mindustry.world.blocks.distribution.Duct;
 import mindustry.world.blocks.distribution.DuctBridge;
 import mindustry.world.blocks.distribution.DuctRouter;
 import mindustry.world.blocks.environment.*;
@@ -45,9 +47,10 @@ import mindustry.world.consumers.ConsumeItemRadioactive;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 
-import static arc.graphics.g2d.Draw.alpha;
-import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Draw.*;
 import static arc.math.Angles.randLenVectors;
+import static eternity.classes.mod.Classification.*;
+import static eternity.content.EtAttributes.*;
 import static eternity.content.EtLiquids.*;
 import static eternity.content.EtUnits.*;
 import static mindustry.Vars.*;
@@ -70,6 +73,7 @@ public class EtBlocks {
             riftedStone, riftedStoneWall, riftedBoulder,
                 //Abotium
             sharpslate, wardSharpslate, sharpslateWall, sharpslateBoulder,
+            blueSand, blueSandWall, blueSandBoulder,
                 //Stellar
             stellarMetal, stellarMetal1, stellarMetalLamp,
                 //Cult
@@ -77,7 +81,7 @@ public class EtBlocks {
             digFloor1, digFloor2, digFloor3, digFloor4, digFloor5,
             blueSnow, blueSnowWall, blueSnowBoulder,
             altIceCrack, altIce, altIceWall, frostCoreZone, shallowFrostCoreZone, iceShatters,
-            smallRift, malachiteCrystal,
+            smallRift, mediumRift, largeRift, malachiteCrystal,
             oreGold, oreStrontium, oreCosmicDust, orePalladium,
             oreCobalt, oreSelenium, oreAnthracite,
             //crafting
@@ -85,7 +89,7 @@ public class EtBlocks {
             //power
             lightningNode, lightningTower, powerHub, stellarRTG, thermalReactor,
             //production
-            brokenDrill, cosmicExcavator, frostyDrill, radiator,
+            brokenDrill, cosmicExcavator, frostyDrill, radiator, oilCracker, monolite,
             //defence
             aegisBarrier, titanBarrier, infiniteFortress, techCenter, advancedRadar, nullifier,
             //storage
@@ -101,7 +105,7 @@ public class EtBlocks {
             recall, glare,
             galaxyTurret, novaTurret, substanceBlaster, coreBlaster, coldPhasor, nexxonPhasor, poseidon, zyconStorm, grandBlaster, gloriousBlaster, despondence, viraHealer, sanctumBeacon,
             gale,
-            hope, lie, well,
+            hope, lie, resonance, well,
             mionDroneBlock;
     public static void load(){
         doronStone = new Floor("doron-stone");
@@ -205,14 +209,28 @@ public class EtBlocks {
         wardSharpslate = new Floor("ward-sharpslate"){{
             variants = 4;
             blendGroup = sharpslate;
+            attributes.set(ward, 0.25f);
         }};
         sharpslateWall = new StaticWall("sharpslate-wall"){{
             variants = 4;
-            wardSharpslate.asFloor().decoration = this;
+            wardSharpslate.asFloor().wall = this;
+            sharpslate.asFloor().wall = this;
         }};
         sharpslateBoulder = new Prop("sharpslate-boulder"){{
             variants = 2;
             sharpslate.asFloor().decoration = this;
+        }};
+        blueSand = new Floor("blue-sand"){{
+            variants = 4;
+            attributes.set(oily, 0.25f);
+        }};
+        blueSandWall = new StaticWall("blue-sand-wall"){{
+            variants = 4;
+            blueSand.asFloor().wall = this;
+        }};
+        blueSandBoulder = new Prop("blue-sand-boulder"){{
+            variants = 2;
+            blueSand.asFloor().decoration = this;
         }};
         stellarMetal = new Floor("stellar-metal", 0){{
             mapColor = Color.valueOf("2e2f34");
@@ -282,7 +300,7 @@ public class EtBlocks {
             rareUnitChance = 0.25f;
             updateEffect = new ParticleEffect(){{
                 line = true;
-                colorFrom = colorTo = Color.valueOf("209d2a");
+                colorFrom = colorTo = EternityPal.malachiteColor;
                 lenFrom = 5f;
                 lenTo = 0;
                 particles = 2;
@@ -292,22 +310,23 @@ public class EtBlocks {
             }};
             spawnUnits = new UnitType[][]{
                     //TODO make nuclear units
-                    {electron, electron},
-                    {nova, pulsar},
-                    {crawler, atrax}
+                    {electron},
+                    {nova},
+                    {crawler}
             };
             rareUnits = new UnitType[][]{
-                    {pain, pain},
-                    {fault, fault},
-                    {infectedMionDrone, infectedMionDrone}
+                    {pain},
+                    {infectedGerb},
+                    {infectedMionDrone}
             };
+            ClassificationMeta.put(this, malachite);
         }};
         malachiteCrystal = new ExplosiveCrystal("malachite-crystal"){{
                 requirements(Category.effect, BuildVisibility.sandboxOnly, with());
                 health = 460;
             explodeEffect = new MultiEffect(new ParticleEffect(){{
                 line = true;
-                colorFrom = colorTo = Color.valueOf("209d2a");
+                colorFrom = colorTo = EternityPal.malachiteColor;
                 lenFrom = 7f;
                 lenTo = 0;
                 particles = 8;
@@ -315,11 +334,13 @@ public class EtBlocks {
                 lifetime = 45f;
                 length = explosionRadius * tilesize;
             }}, new WaveEffect(){{
-                colorFrom = colorTo = Color.valueOf("209d2a");
+                colorFrom = EternityPal.malachiteColor;
+                colorTo = EternityPal.darkMalachiteColor;
                 sizeTo = explosionRadius * tilesize;
                 lifetime = 45f;
             }}
             );
+            ClassificationMeta.put(this, malachite);
         }};
         oreGold = new OreBlock(gold);
         oreStrontium = new OreBlock(strontium);
@@ -340,6 +361,7 @@ public class EtBlocks {
             consumePower(4.5f);
             consumeItems(with(copper, 2, titanium, 3));
             researchCostMultiplier = 0.5f;
+            ClassificationMeta.put(this, misc);
         }};
         terraSmelter = new NuclearCrafter("terra-smelter"){{
             requirements(Category.crafting, with(silicon, 145, thorium, 90, titanium, 75, plastanium, 60, nissin, 110));
@@ -355,6 +377,7 @@ public class EtBlocks {
             consumeLiquids(LiquidStack.with(slag, 20f/60, cryofluid, 8f/60));
             consumeItems(with(silicon, 3, copper, 2));
             researchCostMultiplier = 0.5f;
+            ClassificationMeta.put(this, misc);
         }};
         steelFoundry = new AttributeCrafter("steel-foundry"){{
             requirements(Category.crafting, with(strontium, 110));
@@ -377,6 +400,7 @@ public class EtBlocks {
             consumePower(3f);
             consumeItems(with(strontium, 1, gold, 1));
             researchCostMultiplier = 0.5f;
+            ClassificationMeta.put(this, ruin);
         }};
         filter = new GenericCrafter("filter"){{
             requirements(Category.crafting, with(strontium, 95, steel, 60));
@@ -391,6 +415,7 @@ public class EtBlocks {
             outputItems = with(ruinSandItem, 1);
 
             drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawLiquidTile(corruptedWater, 1), new DrawRegion("-rotator", 3, true), new DrawDefault());
+            ClassificationMeta.put(this, ruin);
         }};
         glassFabricator = new GenericCrafter("glass-fabricator"){{
             requirements(Category.crafting, with(strontium, 140, steel, 85, cosmicDust, 60));
@@ -412,6 +437,7 @@ public class EtBlocks {
                 sinScl = 12f;
                 sinMag = 3;
             }});
+            ClassificationMeta.put(this, ruin);
         }};
         electronicWeaver = new GenericCrafter("electronic-weaver"){{
             requirements(Category.crafting, with(strontium, 120, gold, 90, steel, 110, cosmicDust, 85));
@@ -433,6 +459,7 @@ public class EtBlocks {
             drawer = new DrawMulti(new DrawDefault(), new DrawFade());
             consumePower(7.5f);
             consumeItems(with(steel, 1, gold, 3));
+            ClassificationMeta.put(this, ruin);
         }};
         plateForge = new GenericCrafter("plate-forge"){{
             requirements(Category.crafting, with(strontium, 210, gold, 145, steel, 120, electronicPart, 90));
@@ -458,6 +485,7 @@ public class EtBlocks {
             drawer = new DrawMulti(new DrawDefault());
             consumePower(9f);
             consumeItems(with(steel, 3));
+            ClassificationMeta.put(this, ruin);
         }};
         lightningNode = new BeamNode("lightning-node"){{
             requirements(Category.power, with(gold, 10));
@@ -470,6 +498,7 @@ public class EtBlocks {
             fogRadius = 1;
             researchCost = with(gold, 25);
             consumePower(0.1f);
+            ClassificationMeta.put(this, ruin);
         }};
         stellarRTG = new ConsumeGenerator("stellar-rtg"){{
             requirements(Category.power, with(strontium, 60, gold, 35));
@@ -482,6 +511,7 @@ public class EtBlocks {
             drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion());
             consume(new ConsumeItemRadioactive());
             squareSprite = false;
+            ClassificationMeta.put(this, ruin);
         }};
         thermalReactor = new OverheatGenerator("thermal-reactor"){{
             requirements(Category.power, with(strontium, 120, gold, 90, electronicPart, 65, steel, 80));
@@ -508,6 +538,7 @@ public class EtBlocks {
             ambientSoundVolume = 0.06f;
             squareSprite = false;
             consumeLiquid(corruptedWater, 8f / 60f).optional(true, false);
+            ClassificationMeta.put(this, ruin);
         }};
         brokenDrill = new ExcavatorDrill("broken-drill"){{
             requirements(Category.production, with(strontium, 25));
@@ -519,6 +550,7 @@ public class EtBlocks {
             solidMultipler = 0.5f;
 
             consumeLiquid(water, 0.1f).boost();
+            ClassificationMeta.put(this, ruin);
         }};
         cosmicExcavator = new ExcavatorDrill("cosmic-excavator"){{
             requirements(Category.production, with(strontium, 80, electronicPart, 20, cosmicDust, 45));
@@ -532,6 +564,7 @@ public class EtBlocks {
 
             consumeLiquid(water, 0.15f).boost();
             consumePower(4f);
+            ClassificationMeta.put(this, ruin);
         }};
         frostyDrill = new FrostyDrill("frosty-drill"){{
             requirements(Category.production, with(cobalt, 10, selenium, 5));
@@ -540,9 +573,35 @@ public class EtBlocks {
             size = 2;
             researchCost = with(cobalt, 40, selenium, 20);
             liquidBoostIntensity = 1;
+            ClassificationMeta.put(this, cycle);
         }};
         radiator = new GroundHeater("radiator"){{
             requirements(Category.production, with(cobalt, 45, anthracite, 30));
+            ClassificationMeta.put(this, cycle);
+        }};
+        oilCracker = new AttributeCrafter("oil-cracker"){{
+            requirements(Category.production, with(monoShards, 80));
+            craftTime = 100;
+            size = 2;
+            hasLiquids = true;
+            hasPower = true;
+            hasItems = true;
+
+            craftEffect = Fx.none;
+            attribute = oily;
+            squareSprite = false;
+
+            legacyReadWarmup = true;
+            drawer = new DrawMulti(
+                    new DrawLiquidTile(oil, 1.5f),
+                    new DrawDefault()
+            );
+            minEfficiency = 0.01f;
+            baseEfficiency = 0;
+
+            consumePower(75f / 60f);
+            outputLiquid = new LiquidStack(oil, 5f / 60f);
+            ClassificationMeta.put(this, cult);
         }};
         titanBarrier = new StellarWall("titan-barrier"){{
             requirements(Category.defense, BuildVisibility.sandboxOnly, with(strontium, 80));
@@ -551,6 +610,7 @@ public class EtBlocks {
             armor = 3;
             hitsRequire = 0;
             researchCostMultiplier = 0.55f;
+            ClassificationMeta.put(this, ruin);
         }};
         aegisBarrier = new StellarWall("aegis-barrier"){{
             requirements(Category.defense, with(strontium, 80));
@@ -560,6 +620,7 @@ public class EtBlocks {
             upgradeBlock = titanBarrier;
             buildCostMultiplier = 0.5f;
             researchCostMultiplier = 0.3f;
+            ClassificationMeta.put(this, ruin);
         }};
         infiniteFortress = new StellarWall("infinite-fortress"){{
             requirements(Category.defense, with(steel, 130, platePart, 55));
@@ -569,6 +630,7 @@ public class EtBlocks {
             hitsRequire = 0;
             buildCostMultiplier = 0.5f;
             researchCostMultiplier = 0.5f;
+            ClassificationMeta.put(this, ruin);
         }};
         advancedRadar = new AdvRadar("advanced-radar"){{
             requirements(Category.effect, with(strontium, 120, steel, 75, electronicPart, 35));
@@ -578,6 +640,7 @@ public class EtBlocks {
             size = 2;
 
             consumePower(1.5f);
+            ClassificationMeta.put(this, ruin);
         }};
         nullifier = new Nullifier("nullifier"){{
             requirements(Category.effect, with(strontium, 280, gold, 210, steel, 180, electronicPart, 90));
@@ -585,6 +648,7 @@ public class EtBlocks {
             size = 3;
 
             consumePower(9f);
+            ClassificationMeta.put(this, ruin);
         }};
 
         commandBase = new CommandCore("command-base"){{
@@ -602,6 +666,7 @@ public class EtBlocks {
                     new CommandCoreUnit(coreDrone, 1),
                     new CommandCoreUnit(viraDrone, 2)
             );
+            ClassificationMeta.put(this, ruin);
         }};
         commandCenter = new CommandCore("command-center"){{
             //TODO requirements
@@ -618,6 +683,7 @@ public class EtBlocks {
                     new CommandCoreUnit(viraDrone, 2),
                     new CommandCoreUnit(quasar, 3)
             );
+            ClassificationMeta.put(this, ruin);
         }};
         coreFrost = new CoreFrost("core-frost"){{
             requirements(Category.effect,  with(cobalt, 900, selenium, 300));
@@ -630,6 +696,21 @@ public class EtBlocks {
             size = 3;
 
             unitCapModifier = 6;
+            ClassificationMeta.put(this, cycle);
+        }};
+        stellarDuct = new CapRegionDuct("stellar-duct"){{
+            requirements(Category.distribution, with(strontium, 1));
+            health = 140;
+            speed = 4.5f;
+            researchCost = with(strontium, 10);
+            ClassificationMeta.put(this, ruin);
+        }};
+        stellarRouter = new DuctRouter("stellar-router"){{
+            requirements(Category.distribution, with(strontium, 8));
+            squareSprite = false;
+            health = 130;
+            speed = 4.5f;
+            ClassificationMeta.put(this, ruin);
         }};
         stellarBridge = new DuctBridge("stellar-bridge"){{
             requirements(Category.distribution, with(strontium, 10, gold, 4));
@@ -637,42 +718,35 @@ public class EtBlocks {
             speed = 2.25f;
             buildCostMultiplier = 2f;
             researchCostMultiplier = 0.35f;
-        }};
-        stellarDuct = new CapRegionDuct("stellar-duct"){{
-            requirements(Category.distribution, with(strontium, 1));
-            health = 140;
-            speed = 4.5f;
-            researchCost = with(strontium, 10);
-            bridgeReplacement = stellarBridge;
-        }};
-        stellarRouter = new DuctRouter("stellar-router"){{
-            requirements(Category.distribution, with(strontium, 8));
-            squareSprite = false;
-            health = 130;
-            speed = 4.5f;
+            ClassificationMeta.put(this, ruin);
         }};
         cobaltDuct = new CapRegionDuct("cobalt-duct"){{
             requirements(Category.distribution, with(cobalt, 1));
             health = 140;
             speed = 5.5f;
             researchCost = with(cobalt, 30);
-            bridgeReplacement = stellarBridge;
+            ClassificationMeta.put(this, cycle);
         }};
+        ((Duct) stellarDuct).bridgeReplacement = stellarBridge;
+        ((Duct) cobaltDuct).bridgeReplacement = stellarBridge;
         fragilePump = new Pump("fragile-pump"){{
             requirements(Category.liquid, with(strontium, 10, steel, 8));
             pumpAmount = 8f / 60f;
+            ClassificationMeta.put(this, ruin);
         }};
         plastMassConveyor = new PayloadConveyor("plast-mass-conveyor"){{
             requirements(Category.units, with(graphite, 20, plastanium, 14));
             health = 100;
             canOverdrive = false;
             moveTime = 30;
+            ClassificationMeta.put(this, misc);
         }};
         plastMassRouter = new PayloadRouter("plast-mass-router"){{
             requirements(Category.units, with(graphite, 25, plastanium, 18));
             health = 100;
             canOverdrive = false;
             moveTime = 30;
+            ClassificationMeta.put(this, misc);
         }};
         surgeMassConveyor = new PayloadConveyor("surge-mass-conveyor"){{
             requirements(Category.units, with(graphite, 25, surgeAlloy, 15, phaseFabric, 8));
@@ -687,6 +761,7 @@ public class EtBlocks {
             canOverdrive = false;
             moveTime = 20;
             moveForce = 26;
+            ClassificationMeta.put(this, misc);
         }};
         smallMassDriver = new PayloadMassDriver("small-mass-driver"){{
             requirements(Category.units, with(titanium, 170, silicon, 120, graphite, 140, plastanium, 100));
@@ -697,6 +772,7 @@ public class EtBlocks {
             maxPayloadSize = 2.5f;
             fogRadius = 5;
             consumePower(2f);
+            ClassificationMeta.put(this, misc);
         }};
         recall = new ItemTurret("recall"){{
             requirements(Category.turret, with(copper, 110, lead, 70, silicon, 65, titanium, 40));
@@ -758,6 +834,7 @@ public class EtBlocks {
             researchCostMultiplier = 0.3f;
 
             limitRange(2);
+            ClassificationMeta.put(this, misc);
         }};
         glare = new PowerTurret("glare"){{
             requirements(Category.turret,BuildVisibility.sandboxOnly, with());
@@ -786,6 +863,7 @@ public class EtBlocks {
             drawer = new DrawTurret("ast-");
             outlineColor = Color.valueOf("22262b");
             connectedPower = false;
+            ClassificationMeta.put(this, misc);
         }};
         novaTurret = new StellarPowerTurret("nova-turret"){{
             requirements(Category.turret, with(strontium, 45, gold, 40));
@@ -812,6 +890,7 @@ public class EtBlocks {
             coolant = consumeCoolant(0.1f);
             shoot = new ShootAlternate(2.5f);
             researchCostMultiplier = 0.05f;
+            ClassificationMeta.put(this, ruin);
         }};
         coreBlaster = new StellarPowerTurret("core-blaster"){{
             requirements(Category.turret, with(strontium, 35, gold, 50));
@@ -839,6 +918,7 @@ public class EtBlocks {
             shootSound = Sounds.blaster;
             coolant = consumeCoolant(0.1f);
             researchCostMultiplier = 0.25f;
+            ClassificationMeta.put(this, ruin);
         }};
         coldPhasor = new StellarPowerTurret("cold-phasor"){{
             requirements(Category.turret, BuildVisibility.sandboxOnly, with(strontium, 65, gold, 40, steel, 25));
@@ -892,6 +972,7 @@ public class EtBlocks {
             shootRequire = 0;
             shootSound = Sounds.lasershoot;
             coolant = consumeCoolant(0.1f);
+            ClassificationMeta.put(this, ruin);
         }};
         nexxonPhasor = new StellarPowerTurret("nexxon-phasor"){{
             requirements(Category.turret, with(strontium, 65, gold, 40, steel, 25));
@@ -944,6 +1025,7 @@ public class EtBlocks {
             upgradeBlock = coldPhasor;
             shootSound = Sounds.lasershoot;
             coolant = consumeCoolant(0.1f);
+            ClassificationMeta.put(this, ruin);
         }};
         poseidon = new PowerTurret("poseidon"){{
             requirements(Category.turret, BuildVisibility.sandboxOnly, with(silicon, 195, graphite, 140, steel, 85, thorium, 100));
@@ -1007,6 +1089,7 @@ public class EtBlocks {
             researchCostMultiplier = 0.3f;
 
             limitRange(5);
+            ClassificationMeta.put(this, ruin);
         }};
         zyconStorm = new StellarPowerTurret("zycon-storm"){{
             requirements(Category.turret, with(silicon, 195, graphite, 140, steel, 85, thorium, 100));
@@ -1071,6 +1154,7 @@ public class EtBlocks {
             researchCostMultiplier = 0.3f;
 
             limitRange(5);
+            ClassificationMeta.put(this, ruin);
         }};
         gloriousBlaster = new StellarPowerTurret("glorious-blaster"){{
             requirements(Category.turret, BuildVisibility.sandboxOnly, with(lead, 115, silicon, 145, graphite, 120, steel, 90));
@@ -1099,6 +1183,7 @@ public class EtBlocks {
                 backColor = EternityPal.grandColor;
                 shootEffect = smokeEffect = Fx.none;
             }};
+            ClassificationMeta.put(this, ruin);
         }};
         grandBlaster = new StellarPowerTurret("grand-blaster"){{
             requirements(Category.turret, with(lead, 115, silicon, 145, graphite, 120, steel, 90));
@@ -1128,6 +1213,7 @@ public class EtBlocks {
                 shootEffect = smokeEffect = Fx.none;
             }};
             researchCostMultiplier = 0.3f;
+            ClassificationMeta.put(this, ruin);
         }};
         despondence = new StellarPowerTurret("descondence"){{
             requirements(Category.turret, with(cosmicDust, 170, steel, 110, electronicPart, 45, laserPart, 20));
@@ -1199,6 +1285,7 @@ public class EtBlocks {
             shootSound = Sounds.blaster;
             consumePower(6f);
             coolant = consumeCoolant(0.4f);
+            ClassificationMeta.put(this, ruin);
         }};
         viraHealer = new StellarPowerTurret("vira-healer"){{
             requirements(Category.effect, with(strontium, 70, gold, 55, steel, 20));
@@ -1246,6 +1333,7 @@ public class EtBlocks {
             shootSound = Sounds.blaster;
             consumePower(1.5f);
             coolant = consumeCoolant(0.1f);
+            ClassificationMeta.put(this, ruin);
         }};
         sanctumBeacon = new StellarPowerTurret("sanctum-beacon"){{
             requirements(Category.effect, with(strontium, 95, steel, 70, repairPart, 25));
@@ -1294,6 +1382,7 @@ public class EtBlocks {
             health = 600;
             shootSound = Sounds.blaster;
             consumePower(2.6f);
+            ClassificationMeta.put(this, ruin);
         }};
         gale = new LiquidTurret("gale"){{
             requirements(Category.turret, with(cobalt, 80, selenium, 35));
@@ -1334,11 +1423,12 @@ public class EtBlocks {
             shootEffect = Fx.none;
             range = 160f;
             scaledHealth = 120;
+            ClassificationMeta.put(this, cycle);
         }};
         hope = new ItemTurret("hope"){{
-            requirements(Category.turret, with(graphite, 35, silicon, 20));
+            requirements(Category.turret, with(monoShards, 70));
             ammo(
-                    silicon, new BasicBulletType(5f, 8){{
+                    monoShards, new BasicBulletType(5f, 8){{
                         width = 7f;
                         height = 11f;
                         homingPower = 0.05f;
@@ -1364,6 +1454,7 @@ public class EtBlocks {
             outlineColor = Color.valueOf("0e0e0e");
 
             limitRange();
+            ClassificationMeta.put(this, cult);
         }};
         lie = new ItemReplaceTurret("lie"){{
             requirements(Category.turret, with(titanium, 95, silicon, 70, lead, 120));
@@ -1442,6 +1533,32 @@ public class EtBlocks {
             outlineColor = Color.valueOf("0e0e0e");
 
             limitRange();
+            ClassificationMeta.put(this, cult);
+        }};
+        resonance = new StellarPowerTurret("resonance"){{
+            requirements(Category.turret, with(monoShards, 220, plastanium, 80, wardCapsule, 20));
+            shootType = new BasicBulletType(10f, 180f){{
+                width = 10f;
+                height = 10f;
+                lifetime = 17f;
+                backColor = EternityPal.cultColor;
+                shootEffect = smokeEffect = Fx.none;
+            }};
+            connectedPower = false;
+            squareSprite = false;
+            drawer = new DrawTurret("cult-");
+            reload = 75f;
+            shootCone = 15f;
+            rotateSpeed = 11f;
+            range = 170f;
+            recoil = 1f;
+            size = 3;
+            health = 1370;
+            shootRequire = 0;
+            shootSound = Sounds.blaster;
+            researchCostMultiplier = 0.05f;
+            consumeLiquid(oil, 20f / 60f);
+            ClassificationMeta.put(this, cult);
         }};
         well = new ItemTurret("well"){{
             requirements(Category.turret, with(copper, 155, plastanium, 170, titanium, 210, silicon, 190, graphite, 240));
@@ -1497,12 +1614,14 @@ public class EtBlocks {
             outlineColor = Color.valueOf("0e0e0e");
 
             limitRange();
+            ClassificationMeta.put(this, cult);
         }};
         mionDroneBlock = new PlaceUnitBlock("mion-drone-block"){{
             requirements(Category.units, with(titanium, 110, metaglass, 60, silicon, 75, steel, 40));
             unitType = mionDrone;
             size = 2;
             hasShadow = false;
+            ClassificationMeta.put(this, ruin);
         }};
     }
 }

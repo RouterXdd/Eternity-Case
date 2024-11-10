@@ -11,6 +11,7 @@ import eternity.classes.entities.abilities.*;
 import eternity.classes.entities.bullets.AdvBasicBulletType;
 import eternity.classes.entities.draw.BladeDraw;
 import eternity.classes.entities.weapons.AdvWeapon;
+import eternity.classes.mod.ClassificationMeta;
 import eternity.classes.type.*;
 import eternity.graphic.EternityPal;
 import mindustry.ai.UnitCommand;
@@ -29,8 +30,9 @@ import mindustry.type.unit.*;
 import mindustry.type.weapons.RepairBeamWeapon;
 import mindustry.world.meta.Env;
 
+import static eternity.classes.mod.Classification.*;
 import static eternity.content.EtStatuses.*;
-import static mindustry.Vars.tilesize;
+import static mindustry.Vars.*;
 import static mindustry.type.ItemStack.*;
 import static mindustry.content.Items.*;
 import static mindustry.content.StatusEffects.*;
@@ -47,14 +49,14 @@ public class EtUnits {
             discuss, skirmish, fight, conflict, war,
             mionDrone, viraSavior, oblivion,
             //Stellar rift units
-            infectedMionDrone, infectedMionDroneL, infectedMionDroneXL, electron, proton, neutron, atom,
+            infectedMionDrone, infectedMionDroneL, infectedMionDroneXL, electron, proton, neutron, atom, infectedGerb,
             //Stellar encycle units
             mistake, bug, exploit,
             mineral, geode, gem,
             //cult units
             fault,
             //random units
-            clear, tyranny, sandStorm, aquarion, bloodwave, liquidShock, aphelops, cultura, abyss, radiance,
+            clear, tyranny, sandStorm, aquarion, bloodwave, liquidShock, aphelops, cultura, abyss, radiance, tasik,
             //defiance ported units
             pain,
             spinor;
@@ -109,6 +111,7 @@ public class EtUnits {
             engineSize = 0f;
             hitSize = 9f;
             alwaysUnlocked = true;
+            ClassificationMeta.put(this, ruin);
 
             weapons.add(new Weapon("none-weapon"){{
                 reload = 16.5f;
@@ -167,6 +170,7 @@ public class EtUnits {
             engineSize = 0f;
             hitSize = 9f;
             alwaysUnlocked = true;
+            ClassificationMeta.put(this, ruin);
             parts.add(new RegionPart("-engine"){{
                           y = 0;
                           layerOffset = -0.001F;
@@ -234,6 +238,7 @@ public class EtUnits {
             hitSize = 9f;
             alwaysUnlocked = true;
             immunities.add(freezing);
+            ClassificationMeta.put(this, cycle);
 
             weapons.add(new Weapon("none-weapon"){{
                 reload = 35f;
@@ -287,6 +292,7 @@ public class EtUnits {
             armor = 5f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(25 - 32f, 7 - 32f, 14, 14), new Rect(25 - 32f, 43 - 32f, 14, 18)};
+            ClassificationMeta.put(this, ruin);
             parts.add(new FlarePart(){{
                 progress = p -> Mathf.cosDeg(Time.time * 4.5f);
                 color1 = Color.valueOf("dcda5b");
@@ -342,6 +348,7 @@ public class EtUnits {
             armor = 8f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(29 - 39f, 6 - 39f, 20, 65)};
+            ClassificationMeta.put(this, ruin);
             weapons.add(new Weapon("eternity-case-constellation-weapon"){{
                 layerOffset = 0.0001f;
                 reload = 190f;
@@ -384,6 +391,7 @@ public class EtUnits {
             armor = 11f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(28 - 54f, 9 - 54f, 14, 15), new Rect(43 - 54f, 88 - 54f, 11, 12)};
+            ClassificationMeta.put(this, ruin);
         }};
         //TODO
         starfall = new StellarTankUnit("starfall"){{
@@ -396,6 +404,7 @@ public class EtUnits {
             armor = 15f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(32 - 71f, 19 - 71f, 21, 24), new Rect(49 - 71f, 84 - 71f, 13, 48) };
+            ClassificationMeta.put(this, ruin);
         }};
         space = new StellarTankUnit("space"){{
             constructor = TankUnit::create;
@@ -408,6 +417,7 @@ public class EtUnits {
             itemCapacity = 0;
             targetAir = false;
             treadRects = new Rect[]{new Rect(30 - 113f, 38 - 113f, 28, 35), new Rect(92 - 113f, 24 - 113f, 21, 42), new Rect(75 - 113f, 161 - 113f, 38, 41)};
+            ClassificationMeta.put(this, ruin);
             weapons.add(new Weapon("eternity-case-space-weapon"){{
                     shootSound = Sounds.missileLarge;
                     x = 0f / 4f;
@@ -577,6 +587,7 @@ public class EtUnits {
             armor = 2f;
             itemCapacity = 0;
             treadRects = new Rect[]{new Rect(9 - 32f, 37 - 32f, 11, 9), new Rect(24 - 32f, 52 - 32f, 8, 8)};
+            ClassificationMeta.put(this, ruin);
             weapons.add(new AdvWeapon("eternity-case-commander-weapon"){{
                 shootSound = Sounds.pew;
                 y = -2.5f;
@@ -620,6 +631,7 @@ public class EtUnits {
             itemCapacity = 0;
             useEngineElevation = false;
             constructor = ElevationMoveUnit::create;
+            ClassificationMeta.put(this, ruin);
 
             abilities.add(new MoveEffectAbility(0f, -2f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
 
@@ -682,6 +694,7 @@ public class EtUnits {
             itemCapacity = 0;
             useEngineElevation = false;
             constructor = ElevationMoveUnit::create;
+            ClassificationMeta.put(this, ruin);
 
             abilities.add(new MoveEffectAbility(4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 4f), new MoveEffectAbility(-4.25f, 0f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
 
@@ -716,6 +729,7 @@ public class EtUnits {
             itemCapacity = 0;
             useEngineElevation = false;
             constructor = ElevationMoveUnit::create;
+            ClassificationMeta.put(this, ruin);
 
             abilities.add(new MoveEffectAbility(8f, -5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-8f, -5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(0f, -7f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
 
@@ -759,6 +773,7 @@ public class EtUnits {
             itemCapacity = 0;
             useEngineElevation = false;
             constructor = ElevationMoveUnit::create;
+            ClassificationMeta.put(this, ruin);
 
             abilities.add(new MoveEffectAbility(8f, -9f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-8f, -9f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(9f, 4f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-9f, 4f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
 
@@ -802,6 +817,7 @@ public class EtUnits {
             itemCapacity = 0;
             useEngineElevation = false;
             constructor = ElevationMoveUnit::create;
+            ClassificationMeta.put(this, ruin);
 
             abilities.add(new MoveEffectAbility(6.5f, -12.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-6.5f, -12.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(13f, -4.75f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-13f, -4.75f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
             abilities.add(new MoveEffectAbility(12.75f, 5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f), new MoveEffectAbility(-12.75f, 5.5f, EternityPal.viraColor, Fx.missileTrailShort, 3f));
@@ -858,6 +874,7 @@ public class EtUnits {
             isEnemy = false;
 
             ammoType = new PowerAmmoType(500);
+            ClassificationMeta.put(this, ruin);
 
             mineTier = 2;
             mineSpeed = 3f;
@@ -878,6 +895,7 @@ public class EtUnits {
             constructor = UnitEntity::create;
             ammoType = new PowerAmmoType(3600);
             abilities.add(new EnrageAbility());
+            ClassificationMeta.put(this, ruin);
             parts.add(new RegionPart("-engine"){{
                 y = 0;
                 layerOffset = -0.001F;
@@ -933,6 +951,7 @@ public class EtUnits {
             engineSize = 2.2f;
             engineOffset = 6f;
             range = 35f;
+            ClassificationMeta.put(this, malachite);
 
             weapons.add(new Weapon(){{
                 shootOnDeath = true;
@@ -979,6 +998,7 @@ public class EtUnits {
 
             shadowElevation = 0.2f;
             groundLayer = Layer.legUnit - 1f;
+            ClassificationMeta.put(this, malachite);
 
             weapons.add(new Weapon("electron-weapon"){{
                 top = mirror = false;
@@ -990,7 +1010,7 @@ public class EtUnits {
                 shootSound = Sounds.spark;
 
                 bullet = new LightningBulletType(){{
-                    lightningColor = hitColor = Color.valueOf("209d2a");
+                    lightningColor = hitColor = EternityPal.malachiteColor;
                     damage = 14f;
                     lightningLength = 10;
                     lightningLengthRand = 5;
@@ -1023,13 +1043,13 @@ public class EtUnits {
                         reload = shoot.firstShotDelay;
 
                         bullet = new LightningBulletType(){{
-                            lightningColor = hitColor = Color.valueOf("209d2a");
+                            lightningColor = hitColor = EternityPal.malachiteColor;
                             damage = 45f;
                             lightningLength = 10;
                             lightningLengthRand = 8;
                             shootEffect = Fx.shootHeal;
                             chargeEffect = new WaveEffect(){{
-                                colorFrom = colorTo = Color.valueOf("209d2a");
+                                colorFrom = colorTo = EternityPal.malachiteColor;
                                 sizeFrom = 4 * 8;
                                 sizeTo = 0;
                                 lifetime = shoot.firstShotDelay;
@@ -1046,6 +1066,72 @@ public class EtUnits {
                         }};
                     }});
         }};
+        infectedGerb = new StellarUnit("infected-gerb"){{
+            health = 280;
+            outlineColor = Color.valueOf("032310");
+
+            legMinLength = 0.9f;
+            legMaxLength = 1.1f;
+            hitSize = 16;
+            legMoveSpace = 1.2f;
+            legLength = 9;
+            legPairOffset = 1;
+            legExtension = 0.5f;
+            rotateSpeed = 6;
+            legBaseOffset = 4;
+            faceTarget = true;
+            allowLegStep = false;
+            drownTimeMultiplier = 9000;
+            mechStepParticles = true;
+            hovering = true;
+            armor = 5f;
+            constructor = LegsUnit::create;
+            ClassificationMeta.put(this, malachite);
+
+            immunities.add(infected);
+            envEnabled|= Env.terrestrial | Env.underwater;
+            envDisabled = Env.none;
+            legStraightness = 0.3f;
+            baseLegStraightness = 0.5f;
+            lockLegBase = true;
+            speed = 0.42f;
+            constructor = LegsUnit::create;
+            parts.add(new RegionPart("-outline"){{
+                          under = true;
+                          mirror = outline = false;
+                      }});
+
+            weapons.add(new Weapon("infection-launcher"){{
+                            top = mirror = false;
+                            shootY = 0f;
+                            reload = 45f;
+                            ejectEffect = Fx.none;
+                            recoil = 0f;
+                            x = 0f;
+                            y = 15f;
+                            shootSound = Sounds.shootAlt;
+                            shoot = new ShootSpread(){{
+                                shots = 3;
+                                spread = 6;
+                            }};
+
+                            bullet = new BasicBulletType(6f, 25){{
+                                smokeEffect = Fx.none;
+                                shootEffect = Fx.none;
+                                width = 10f;
+                                height = 15f;
+                                lifetime = 25f;
+                                hitSize = 6f;
+                                hitColor = backColor = trailColor = EternityPal.darkMalachiteColor;
+                                frontColor = EternityPal.malachiteColor;
+                                trailWidth = 2f;
+                                trailLength = 7;
+                                status = infected;
+                                statusDuration = 8 * 60;
+                                despawnEffect = hitEffect = Fx.hitBulletColor;
+                            }};
+                        }});
+        }};
         mistake = new StellarUnit("mistake"){{
             speed = 0.6f;
             drag = 0.07f;
@@ -1059,6 +1145,7 @@ public class EtUnits {
             boostMultiplier = 0.75f;
             engineOffset = 6f;
             engineSize = 2.5f;
+            ClassificationMeta.put(this, cycle);
 
             armor = 2f;
             weapons.add(new Weapon("eternity-case-mistake-weapon"){{
@@ -1127,6 +1214,7 @@ public class EtUnits {
 
             shadowElevation = 0.2f;
             groundLayer = Layer.legUnit - 1f;
+            ClassificationMeta.put(this, cult);
 
             weapons.add(new Weapon("fault-weapon"){{
                 top = false;
@@ -1184,6 +1272,7 @@ public class EtUnits {
                 fogRadius = 0f;
                 targetable = false;
                 hittable = false;
+                ClassificationMeta.put(this, misc);
             }};
         tyranny = new ErekirUnitType("tyranny"){{
                 drag = 0.1f;
@@ -1221,6 +1310,7 @@ public class EtUnits {
                 hovering = true;
                 shadowElevation = 0.4f;
                 groundLayer = Layer.legUnit;
+                ClassificationMeta.put(this, misc);
                 weapons.add(new Weapon("tyranny-blast-weapon"){{
                     top = false;
                     mirror = false;
@@ -1296,6 +1386,7 @@ public class EtUnits {
             itemCapacity = 0;
             useEngineElevation = false;
             researchCostMultiplier = 0f;
+            ClassificationMeta.put(this, misc);
 
             abilities.add(new SawbladeAbility());
             parts.add(new BladeDraw(8));
@@ -1325,6 +1416,7 @@ public class EtUnits {
             canBoost = true;
             engineOffset = 15.5f;
             engineSize = 4.5f;
+            ClassificationMeta.put(this, misc);
 
             armor = 5f;
             abilities.add(new AutoCannon(){{
@@ -1364,6 +1456,7 @@ public class EtUnits {
             engineOffset = 13.5f;
             engineSize = 7f;
             hitSize = 23f;
+            ClassificationMeta.put(this, misc);
 
             weapons.add(
                     new Weapon("bloodwave-meat-launcher"){{
@@ -1459,6 +1552,7 @@ public class EtUnits {
             stepShake = 0.15f;
             singleTarget = true;
             drownTimeMultiplier = 2.5f;
+            ClassificationMeta.put(this, misc);
 
             weapons.add(
                     new Weapon("eternity-case-liquid-shock-slag-weapon"){{
@@ -1560,6 +1654,7 @@ public class EtUnits {
             crushDamage = 4.5f;
             treadRects = new Rect[]{new Rect(29 - 154f/2f, 13 - 154f/2f, 24, 126)};
             outlineColor = Color.valueOf("44413c");
+            ClassificationMeta.put(this, misc);
 
             weapons.add(new Weapon("eternity-case-aphelops-weapon"){{
                 shootSound = Sounds.mediumCannon;
@@ -1681,6 +1776,7 @@ public class EtUnits {
             engineSize = 0f;
             itemCapacity = 0;
             researchCostMultiplier = 0f;
+            ClassificationMeta.put(this, misc);
 
             abilities.add(new SawbladeAbility(){{
                 damage = 25;
@@ -1699,6 +1795,38 @@ public class EtUnits {
                 }};
             }});
         }};
+        tasik = new UnitType("tasik"){{
+            flying = true;
+            speed = 0.6f;
+            hitSize = 22f;
+            health = 200f;
+            armor = 200f;
+            ammoType = new PowerAmmoType(100);
+            engineOffset = 10;
+            engineSize = 4.5f;
+            constructor = UnitEntity::create;
+            ClassificationMeta.put(this, misc);
+
+            weapons.add(new Weapon(""){{
+                top = false;
+                shootY = 2f;
+                reload = 10f;
+                x = 0f;
+                alternate = mirror = false;
+                ejectEffect = Fx.none;
+                recoil = 2f;
+                shootSound = Sounds.lasershoot;
+
+                bullet = new LaserBoltBulletType(5f, 20){{
+                    lifetime = 30f;
+                    healPercent = -2f;
+                    healAmount = 5;
+                    collidesTeam = true;
+                    backColor = Pal.heal;
+                    frontColor = Color.white;
+                }};
+            }});
+        }};
         abyss = new UnitType("abyss"){{
             constructor = UnitEntity::create;
 
@@ -1712,6 +1840,7 @@ public class EtUnits {
             engineOffset = 16.5f;
             engineSize = 6.5f;
             hitSize = 38f;
+            ClassificationMeta.put(this, i);
 
             weapons.add(new AdvWeapon("eternity-case-abyss-main-weapon"){{
                 reload = 75f;
@@ -1788,6 +1917,9 @@ public class EtUnits {
             drawCell = false;
             outlineRadius = 5;
             outlineColor = Color.valueOf("1b1b1e");
+            immunities.addAll(ancientEMP, freezing, melting, blasted, shocked, sapped, electrified, wet, infected, burning);
+            ClassificationMeta.put(this, i);
+
             weapons.add(new Weapon("eternity-case-radiance-small-weapon"){{
                 top = rotate = true;
                 shootY = 4f;
@@ -1839,8 +1971,9 @@ public class EtUnits {
                     trailLength = 22;
                 }};
             }},
-            new Weapon("eternity-case-radiance-main-weapon"){{
+            new AdvWeapon("eternity-case-radiance-main-weapon"){{
                 top = rotate = false;
+                anywaysShoot = true;
                 shootY = 0f;
                 reload = 780;
                 ejectEffect = Fx.none;
@@ -1848,11 +1981,10 @@ public class EtUnits {
                 recoil = 0;
                 y = 47.5f;
                 x = 0;
-                bullet = new BasicBulletType(0, 0){{
+                bullet = new BasicBulletType(0, 0.00000001f){{
                     width = 0;
                     height = 0f;
                     lifetime = 1f;
-                    damage = 0.00000001f;
                     pierceArmor = pierceBuilding = pierce = true;
                     splashDamageRadius = 20 * 60;
                     status = ancientEMP;
@@ -1870,7 +2002,7 @@ public class EtUnits {
                 }};
                 parts.add(
                 new ShapePart(){{
-                    circle = true;
+                    sides = 360;
                     radius = stroke = 15f;
                     radiusTo = strokeTo = 0;
                     color = Color.valueOf("f2e878");
@@ -1911,6 +2043,7 @@ public class EtUnits {
                 }});
             }});
         }};
+
         pain = new TankUnitType("pain"){{
             constructor = TankUnit::create;
             hitSize = 13f;
@@ -1923,6 +2056,7 @@ public class EtUnits {
             treadRects = new Rect[]{new Rect(10 - 32f, 22 - 32f, 10, 20), new Rect(16 - 32f, 42 - 32f, 10, 15)};
             researchCostMultiplier = 0f;
             outlineColor = Color.valueOf("101113");
+            ClassificationMeta.put(this, i);
 
             weapons.add(new Weapon("eternity-case-pain-weapon"){{
                 layerOffset = 0.0001f;
@@ -1977,6 +2111,7 @@ public class EtUnits {
             pickupUnits = false;
 
             fogRadius = 0f;
+            ClassificationMeta.put(this, i);
 
             setEnginesMirror(
                     new UnitEngine(-18 / 4f, -20 / 4f, 2.5f, -135f)

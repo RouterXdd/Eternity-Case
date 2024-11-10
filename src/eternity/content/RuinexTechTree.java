@@ -6,14 +6,13 @@ import mindustry.game.Objectives.*;
 import static eternity.content.EtItems.*;
 import static eternity.content.EtBlocks.*;
 import static eternity.content.EtSectors.*;
-import static eternity.content.EtTechTreeRoots.*;
 import static eternity.content.EtUnits.*;
 import static mindustry.content.TechTree.*;
 import static mindustry.content.UnitTypes.*;
 
 public class RuinexTechTree{
         public static void load(){
-    EtPlanets.ruinex.techTree = nodeRoot("stellar", stellarRoot, () -> {
+    EtPlanets.ruinex.techTree = nodeRoot("stellar", commandBase, () -> {
         node(stellarDuct, () ->{
             node(stellarRouter, () ->{
                 node(stellarBridge, () ->{
@@ -21,25 +20,23 @@ public class RuinexTechTree{
                 });
             });
         });
-        node(commandBase, () ->{
+        node(coreDrone, () ->{
+
+        });
+        node(viraDrone, () ->{
+
+        });
+        node(commandCenter, () ->{
             node(coreDrone, () ->{
 
             });
             node(viraDrone, () ->{
 
             });
-            node(commandCenter, () ->{
-                node(coreDrone, () ->{
-
-                });
-                node(viraDrone, () ->{
-
-                });
-                node(quasar, () ->{
-
-                });
+            node(quasar, () ->{
 
             });
+
         });
         node(brokenDrill, () ->{
             node(cosmicExcavator, () ->{
@@ -49,10 +46,10 @@ public class RuinexTechTree{
         node(steelFoundry, Seq.with(new OnSector(ruinShore)), () ->{
             node(filter, () ->{
                 node(glassFabricator, () ->{
-                    node(electronicWeaver, () ->{
-                        node(plateForge, () ->{
 
-                        });
+                });
+                node(electronicWeaver, () ->{
+                    node(plateForge, () ->{
 
                     });
                 });
