@@ -1535,7 +1535,7 @@ public class EtBlocks {
             limitRange();
             ClassificationMeta.put(this, cult);
         }};
-        resonance = new StellarPowerTurret("resonance"){{
+        resonance = new PowerTurret("resonance"){{
             requirements(Category.turret, with(monoShards, 220, plastanium, 80, wardCapsule, 20));
             shootType = new BasicBulletType(10f, 180f){{
                 width = 10f;
@@ -1544,8 +1544,10 @@ public class EtBlocks {
                 backColor = EternityPal.cultColor;
                 shootEffect = smokeEffect = Fx.none;
             }};
+            shootY = 4;
             connectedPower = false;
             squareSprite = false;
+            outlineColor = Color.valueOf("0e0e0e");
             drawer = new DrawTurret("cult-");
             reload = 75f;
             shootCone = 15f;
@@ -1554,8 +1556,7 @@ public class EtBlocks {
             recoil = 1f;
             size = 3;
             health = 1370;
-            shootRequire = 0;
-            shootSound = Sounds.blaster;
+            shootSound = Sounds.pulseBlast;
             researchCostMultiplier = 0.05f;
             consumeLiquid(oil, 20f / 60f);
             ClassificationMeta.put(this, cult);
