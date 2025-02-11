@@ -2,47 +2,48 @@ package eternity.content;
 
 
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.*;
+import arc.math.Interp;
 import arc.math.Interp.*;
 import arc.struct.Seq;
-import eternity.classes.blocks.defence.AdvRadar;
-import eternity.classes.blocks.defence.Nullifier;
+import eternity.classes.blocks.defence.*;
 import eternity.classes.blocks.distribution.CapRegionDuct;
-import eternity.classes.blocks.defence.StellarWall;
+import eternity.classes.blocks.distribution.Rail;
 import eternity.classes.blocks.environment.*;
-import eternity.classes.blocks.storage.CoreFrost;
-import eternity.classes.blocks.units.Rift;
+import eternity.classes.blocks.malachite.*;
+import eternity.classes.blocks.power.*;
+import eternity.classes.blocks.storage.*;
+import eternity.classes.blocks.turrets.AccelPowerTurret;
+import eternity.classes.blocks.turrets.cult.*;
+import eternity.classes.blocks.turrets.stellar.*;
+import eternity.classes.blocks.units.*;
 import eternity.classes.blocks.power.OverheatGenerator;
 import eternity.classes.blocks.production.*;
 import eternity.classes.blocks.storage.CommandCore;
-import eternity.classes.blocks.turrets.*;
 import eternity.classes.blocks.units.PlaceUnitBlock;
+import eternity.classes.entities.bullets.AccelLaserBoltBulletType;
 import eternity.classes.mod.ClassificationMeta;
 import eternity.graphic.EternityPal;
 import mindustry.content.*;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
+import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
 import mindustry.gen.Bullet;
 import mindustry.gen.Sounds;
-import mindustry.graphics.CacheLayer;
-import mindustry.graphics.Pal;
+import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.unit.*;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
-import mindustry.world.blocks.distribution.Duct;
-import mindustry.world.blocks.distribution.DuctBridge;
-import mindustry.world.blocks.distribution.DuctRouter;
+import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.payloads.*;
-import mindustry.world.blocks.power.BeamNode;
-import mindustry.world.blocks.power.ConsumeGenerator;
-import mindustry.world.blocks.production.AttributeCrafter;
-import mindustry.world.blocks.production.GenericCrafter;
-import mindustry.world.blocks.production.Pump;
+import mindustry.world.blocks.power.*;
+import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.consumers.ConsumeItemRadioactive;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
@@ -52,7 +53,7 @@ import static arc.math.Angles.randLenVectors;
 import static eternity.classes.mod.Classification.*;
 import static eternity.content.EtAttributes.*;
 import static eternity.content.EtLiquids.*;
-import static eternity.content.EtUnits.*;
+import static eternity.content.EtUnitTypes.*;
 import static mindustry.Vars.*;
 import static mindustry.content.StatusEffects.*;
 import static mindustry.content.UnitTypes.*;
@@ -74,29 +75,47 @@ public class EtBlocks {
                 //Abotium
             sharpslate, wardSharpslate, sharpslateWall, sharpslateBoulder,
             blueSand, blueSandWall, blueSandBoulder,
+            sparkStone, sparkStoneWall, sparkStoneBoulder, skintFloor, skintWall, skintPolyp,
                 //Stellar
             stellarMetal, stellarMetal1, stellarMetalLamp,
                 //Cult
                 //Misc
             digFloor1, digFloor2, digFloor3, digFloor4, digFloor5,
+                    //Cyclefite
             blueSnow, blueSnowWall, blueSnowBoulder,
             altIceCrack, altIce, altIceWall, frostCoreZone, shallowFrostCoreZone, iceShatters,
-            smallRift, mediumRift, largeRift, malachiteCrystal,
+            mercuryFloor, mercuryFloorRed, mercuryTile, mercuryIce, mercuryWall, mercuryBoulder, mercuryChunk,
+                    //Cyclefite end
+            smallRift, mediumRift, largeRift,
             oreGold, oreStrontium, oreCosmicDust, orePalladium,
+            oreMonoShards, oreCesium,
             oreCobalt, oreSelenium, oreAnthracite,
             //crafting
             nissinForge, terraSmelter, steelFoundry, filter, glassFabricator, electronicWeaver, healingPress, plateForge,
+            plastaniumReformer,
+            atmosphericSeparator, paralineKiln, lunarConstructor,
             //power
             lightningNode, lightningTower, powerHub, stellarRTG, thermalReactor,
+            skintGenerator,
+            freezeReactor,
             //production
-            brokenDrill, cosmicExcavator, frostyDrill, radiator, oilCracker, monolite,
+            brokenDrill, cosmicExcavator,
+            frostyDrill, radiator, mercuryExtractor,
+            monoDrill, oilCracker, monolite,
             //defence
             aegisBarrier, titanBarrier, infiniteFortress, techCenter, advancedRadar, nullifier,
+            cobaltWall, cobaltWallLarge, lunarWall, lunarWallLarge,
             //storage
-            commandBase, commandCenter, commandStation, coreFrost,
+            commandBase, commandCenter, commandStation,
+            coreFrost,
+            coreFade, coreDisappear, coreEmpty,
+            coreProcessor, coreMicroscheme, coreEngine, //TODO make only one core for derin?
+            coreRiot, coreResist,
+            coreEternity,
             //distribution
             stellarDuct, stellarRouter, stellarBridge,
-            cobaltDuct,
+            rail,
+            cobaltDuct, cobaltRouter, cobaltBridge,
             //liquid
             fragilePump,
             //payload
@@ -104,9 +123,15 @@ public class EtBlocks {
             //turrets
             recall, glare,
             galaxyTurret, novaTurret, substanceBlaster, coreBlaster, coldPhasor, nexxonPhasor, poseidon, zyconStorm, grandBlaster, gloriousBlaster, despondence, viraHealer, sanctumBeacon,
-            gale,
-            hope, lie, resonance, well,
-            mionDroneBlock;
+            gale, whirl, ignite,
+            hope, lie, glance, resonance, pervision, well,
+            bolter,
+            slash, fracture,
+            //units
+            mionDroneBlock, cobaltPort,
+            //Malachite structures
+            malachiteIncubator, malachiteCrystal, perfectMalachite
+                    ;
     public static void load(){
         doronStone = new Floor("doron-stone");
         roughDoronStone = new Floor("rough-doron-stone");
@@ -232,6 +257,28 @@ public class EtBlocks {
             variants = 2;
             blueSand.asFloor().decoration = this;
         }};
+        sparkStone = new Floor("spark-stone"){{
+            variants = 4;
+        }};
+        sparkStoneWall = new StaticWall("spark-wall"){{
+            variants = 4;
+            sparkStone.asFloor().wall = this;
+        }};
+        sparkStoneBoulder = new Prop("spark-boulder"){{
+            variants = 2;
+            sparkStone.asFloor().decoration = this;
+        }};
+        skintFloor = new Floor("skint-floor"){{
+            variants = 3;
+        }};
+        skintWall = new StaticWall("skint-wall"){{
+            variants = 3;
+            skintFloor.asFloor().wall = this;
+        }};
+        skintPolyp = new TallBlock("skint-polyp"){{
+            variants = 2;
+            attributes.set(skinted, 1);
+        }};
         stellarMetal = new Floor("stellar-metal", 0){{
             mapColor = Color.valueOf("2e2f34");
         }};
@@ -261,7 +308,7 @@ public class EtBlocks {
         }};
         blueSnowBoulder = new Prop("blue-snow-boulder"){{
             variants = 2;
-            ruinSand.asFloor().decoration = this;
+            blueSnow.asFloor().decoration = this;
         }};
         altIceCrack = new Floor("alt-ice-crack"){{
             dragMultiplier = 0.4f;
@@ -293,7 +340,47 @@ public class EtBlocks {
             cacheLayer = CacheLayer.water;
             mapColor = Color.valueOf("688ec2");
         }};
-        iceShatters = new OverlayFloor("ice-shatters");
+        iceShatters = new OverlayFloor("ice-shatters"){{
+            altIce.asFloor().decoration = this;
+        }};
+        mercuryFloor = new Floor("mercury-floor"){{
+            variants = 4;
+        }};
+
+        mercuryFloorRed = new Floor("mercury-floor-red"){{
+            variants = 2;
+            attributes.set(merc, 0.15f);
+            blendGroup = mercuryFloor;
+        }};
+        mercuryTile = new Floor("mercury-tile"){{
+            speedMultiplier = 0.25f;
+            variants = 0;
+            status = StatusEffects.wet;
+            statusDuration = 90f;
+            liquidDrop = mercury;
+            isLiquid = true;
+            drownTime = 180f;
+            cacheLayer = CacheLayer.mud;
+            albedo = 0.9f;
+            supportsOverlay = true;
+        }};
+        mercuryIce = new Floor("mercury-ice"){{
+            variants = 4;
+            dragMultiplier = 0.4f;
+            speedMultiplier = 0.9f;
+            attributes.set(Attribute.water, 0.4f);
+        }};
+        mercuryWall = new StaticWall("mercury-wall"){{
+            variants = 4;
+            mercuryFloor.asFloor().wall = mercuryFloorRed.asFloor().wall = mercuryIce.asFloor().wall = mercuryTile.asFloor().wall = this;
+        }};
+        mercuryBoulder = new Prop("mercury-boulder"){{
+            variants = 2;
+            mercuryFloor.asFloor().decoration = mercuryFloorRed.asFloor().decoration = this;
+        }};
+        mercuryChunk = new TallBlock("mercury-chunk"){{
+            variants = 2;
+        }};
         smallRift = new Rift("small-rift"){{
             requirements(Category.effect,BuildVisibility.sandboxOnly, with());
             size = 3;
@@ -321,31 +408,12 @@ public class EtBlocks {
             };
             ClassificationMeta.put(this, malachite);
         }};
-        malachiteCrystal = new ExplosiveCrystal("malachite-crystal"){{
-                requirements(Category.effect, BuildVisibility.sandboxOnly, with());
-                health = 460;
-            explodeEffect = new MultiEffect(new ParticleEffect(){{
-                line = true;
-                colorFrom = colorTo = EternityPal.malachiteColor;
-                lenFrom = 7f;
-                lenTo = 0;
-                particles = 8;
-                cone = 360;
-                lifetime = 45f;
-                length = explosionRadius * tilesize;
-            }}, new WaveEffect(){{
-                colorFrom = EternityPal.malachiteColor;
-                colorTo = EternityPal.darkMalachiteColor;
-                sizeTo = explosionRadius * tilesize;
-                lifetime = 45f;
-            }}
-            );
-            ClassificationMeta.put(this, malachite);
-        }};
         oreGold = new OreBlock(gold);
         oreStrontium = new OreBlock(strontium);
         oreCosmicDust = new OreBlock(cosmicDust);
         orePalladium = new OreBlock(oxidePalladium);
+        oreMonoShards = new OreBlock(monoShards);
+        oreMonoShards = new OreBlock(cesium);
         oreCobalt = new OreBlock(cobalt);
         oreSelenium = new OreBlock(selenium);
         oreAnthracite = new OreBlock(anthracite);
@@ -487,6 +555,102 @@ public class EtBlocks {
             consumeItems(with(steel, 3));
             ClassificationMeta.put(this, ruin);
         }};
+        plastaniumReformer = new GenericCrafter("plastanium-reformer"){{
+            requirements(Category.crafting, with(monoShards, 170));
+            outputItems = with(plastanium, 3);
+            craftTime = 270f;
+            size = 3;
+            hasPower = true;
+            itemCapacity = 12;
+            squareSprite = false;
+            drawer = new DrawMulti(new DrawRegion("-wire"){{
+                layer = 2;
+                drawPlan = false;
+            }},new DrawRegion("-bottom"),new DrawLiquidTile(){{
+                drawLiquid = oil;
+                padding = 2;
+            }}, new DrawDefault(), new DrawFade());
+
+            consumePower(20f);
+            consumeLiquid(oil, 25 / 60f);
+            consumeItems(with(cesium, 2));
+            researchCostMultiplier = 0.35f;
+            ClassificationMeta.put(this, cult);
+        }};
+        atmosphericSeparator = new GenericCrafter("atmospheric-separator"){{
+            requirements(Category.crafting, with(cobalt, 30, selenium, 65, anthracite, 10));
+            craftTime = 120;
+            size = 2;
+            hasLiquids = true;
+            hasItems = true;
+
+            craftEffect = Fx.none;
+            squareSprite = false;
+
+            drawer = new DrawMulti(
+                    new DrawDefault(), new DrawLiquidRegion(){{
+                        drawLiquid = helium;
+            }}
+            );
+
+            consumeItem(anthracite, 2);
+            outputLiquid = new LiquidStack(helium, 4f / 60f);
+            ClassificationMeta.put(this, cycle);
+            researchCostMultiplier = 0.08f;
+        }};
+        paralineKiln = new GenericCrafter("paraline-kiln"){{
+            requirements(Category.crafting, with(cobalt, 170, selenium, 110, anthracite, 40));
+            craftTime = 190;
+            size = 3;
+            hasLiquids = true;
+            hasItems = true;
+
+            craftEffect = Fx.none;
+            squareSprite = false;
+
+            drawer = new DrawMulti(
+                    new DrawDefault(), new DrawLiquidRegion(){{
+                        drawLiquid = helium;
+                    }},
+                    new DrawGlowRegion(){{
+                        alpha = 1f;
+                        color = Color.valueOf("e37ea0");
+                        glowIntensity = 0.25f;
+                        glowScale = 8f;
+                    }}
+            );
+
+            consumeLiquid(helium, 8 / 60f);
+            consumeItem(selenium, 3);
+            outputItem = new ItemStack(paraline, 2);
+            ClassificationMeta.put(this, cycle);
+            researchCostMultiplier = 0.075f;
+        }};
+        lunarConstructor = new GenericCrafter("lunar-constructor"){{
+            requirements(Category.crafting, with(cobalt, 380, selenium, 295, paraline, 170, redcury, 130));
+            craftTime = 370;
+            size = 5;
+            hasLiquids = true;
+            hasItems = true;
+
+            craftEffect = Fx.none;
+            squareSprite = false;
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"), new DrawLiquidTile(){{
+                drawLiquid = mercury;
+                padding = 2;
+            }}, new DrawDefault()
+            );
+
+            consumeLiquid(mercury, 15 / 60f);
+            consumeItems(with(cobalt, 2, paraline, 2));
+            consumePower(30f);
+            outputItem = new ItemStack(lunarFragment, 1);
+            ClassificationMeta.put(this, cycle);
+            researchCostMultiplier = 0.1f;
+        }};
+
         lightningNode = new BeamNode("lightning-node"){{
             requirements(Category.power, with(gold, 10));
             consumesPower = outputsPower = true;
@@ -540,6 +704,30 @@ public class EtBlocks {
             consumeLiquid(corruptedWater, 8f / 60f).optional(true, false);
             ClassificationMeta.put(this, ruin);
         }};
+        skintGenerator = new WallGenerator("skint-generator"){{
+            requirements(Category.power, with(monoShards, 95));
+            size = 1;
+            powerProduction = 2.5f;
+            envEnabled = Env.any;
+
+            ClassificationMeta.put(this, cult);
+        }};
+        freezeReactor = new NukeRector("freeze-reactor"){{
+            requirements(Category.power, with(cobalt, 230, anthracite, 145, paraline, 90));
+            ambientSound = Sounds.hum;
+            ambientSoundVolume = 0.275f;
+            size = 3;
+            health = 1350;
+            itemDuration = 300f;
+            powerProduction = 10f;
+            heating = 0.025f;
+            researchCostMultiplier = 0.25f;
+            fuelItem = anthracite;
+
+            consumeItem(anthracite);
+            consumeLiquid(water, heating / coolantPower).update(false);
+            ClassificationMeta.put(this, cycle);
+        }};
         brokenDrill = new ExcavatorDrill("broken-drill"){{
             requirements(Category.production, with(strontium, 25));
             tier = 2;
@@ -574,10 +762,39 @@ public class EtBlocks {
             researchCost = with(cobalt, 40, selenium, 20);
             liquidBoostIntensity = 1;
             ClassificationMeta.put(this, cycle);
+            researchCostMultiplier =  0.1f;
         }};
         radiator = new GroundHeater("radiator"){{
-            requirements(Category.production, with(cobalt, 45, anthracite, 30));
+            requirements(Category.production, with(cobalt, 20, anthracite, 15));
             ClassificationMeta.put(this, cycle);
+            researchCostMultiplier =  0.15f;
+        }};
+        mercuryExtractor = new OverloadAttributeCrafter("mercury-extractor"){{
+            requirements(Category.production, with(cobalt, 230, selenium, 145, paraline, 110));
+            craftTime = 220;
+            size = 4;
+            hasLiquids = true;
+            hasPower = true;
+            hasItems = true;
+
+            craftEffect = Fx.none;
+            attribute = merc;
+            squareSprite = false;
+            explosionPuddleLiquid = mercury;
+
+            drawer = new DrawMulti(
+                    new DrawLiquidTile(mercury, 2),
+                    new DrawDefault()
+            );
+            minEfficiency = 0.01f;
+            baseEfficiency = 0;
+            itemCapacity = 15;
+            consumeLiquid(mercury, 30 / 60f);
+
+            consumePower(4f);
+            outputItem = new ItemStack(redcury, 3);
+            ClassificationMeta.put(this, cycle);
+            researchCostMultiplier = 0.2f;
         }};
         oilCracker = new AttributeCrafter("oil-cracker"){{
             requirements(Category.production, with(monoShards, 80));
@@ -650,6 +867,24 @@ public class EtBlocks {
             consumePower(9f);
             ClassificationMeta.put(this, ruin);
         }};
+        cobaltWall = new Wall("cobalt-wall"){{
+            requirements(Category.defense, with(cobalt, 8));
+            health = 350;
+            armor = 1.5f;
+            size = 1;
+            buildCostMultiplier = 0.8f;
+            researchCostMultiplier = 0.3f;
+            ClassificationMeta.put(this, cycle);
+        }};
+        cobaltWallLarge = new Wall("cobalt-wall-large"){{
+            requirements(Category.defense, with(cobalt, 32));
+            health = 350 * 4;
+            armor = 1.5f;
+            size = 2;
+            buildCostMultiplier = 0.8f;
+            researchCostMultiplier = 0.3f;
+            ClassificationMeta.put(this, cycle);
+        }};
 
         commandBase = new CommandCore("command-base"){{
             requirements(Category.effect,  with(strontium, 1500, gold, 800));
@@ -685,6 +920,24 @@ public class EtBlocks {
             );
             ClassificationMeta.put(this, ruin);
         }};
+        coreFade = new CoreBlock("core-fade"){{
+            requirements(Category.effect, with(monoShards, 1150, plastanium, 750));
+
+            isFirstTier = true;
+            unitType = UnitTypes.evoke;
+            health = 5000;
+            itemCapacity = 1500;
+            size = 3;
+            armor = 5f;
+            alwaysUnlocked = true;
+            incinerateNonBuildable = true;
+            requiresCoreZone = true;
+
+            buildCostMultiplier = 0.7f;
+
+            unitCapModifier = 10;
+            ClassificationMeta.put(this, cult);
+        }};
         coreFrost = new CoreFrost("core-frost"){{
             requirements(Category.effect,  with(cobalt, 900, selenium, 300));
             alwaysUnlocked = true;
@@ -697,6 +950,23 @@ public class EtBlocks {
 
             unitCapModifier = 6;
             ClassificationMeta.put(this, cycle);
+        }};
+        coreEternity = new EternityCore("core-eternity"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with());
+
+            isFirstTier = true;
+            //TODO core unit
+            unitType = emanate;
+            health = 20000;
+            itemCapacity = 10000;
+            size = 5;
+            armor = 10f;
+            squareSprite = false;
+            incinerateNonBuildable = true;
+            requiresCoreZone = true;
+
+            unitCapModifier = 30;
+            ClassificationMeta.put(this, i);
         }};
         stellarDuct = new CapRegionDuct("stellar-duct"){{
             requirements(Category.distribution, with(strontium, 1));
@@ -720,6 +990,13 @@ public class EtBlocks {
             researchCostMultiplier = 0.35f;
             ClassificationMeta.put(this, ruin);
         }};
+        rail = new Rail("rail"){{
+            requirements(Category.distribution, with(monoShards, 1));
+            health = 100;
+            speed = 7f;
+            researchCost = with(monoShards, 50);
+            ClassificationMeta.put(this, cult);
+        }};
         cobaltDuct = new CapRegionDuct("cobalt-duct"){{
             requirements(Category.distribution, with(cobalt, 1));
             health = 140;
@@ -727,8 +1004,24 @@ public class EtBlocks {
             researchCost = with(cobalt, 30);
             ClassificationMeta.put(this, cycle);
         }};
+        cobaltRouter = new DuctRouter("cobalt-router"){{
+            requirements(Category.distribution, with(cobalt, 5, selenium, 2));
+            squareSprite = false;
+            health = 150;
+            speed = 5.5f;
+            researchCost = with(cobalt, 150, selenium, 60);
+            ClassificationMeta.put(this, cycle);
+        }};
+        cobaltBridge = new DuctBridge("cobalt-bridge"){{
+            requirements(Category.distribution, with(cobalt, 8, anthracite, 5));
+            health = 200;
+            speed = 2.75f;
+            buildCostMultiplier = 1.5f;
+            researchCostMultiplier = 0.2f;
+            ClassificationMeta.put(this, cycle);
+        }};
         ((Duct) stellarDuct).bridgeReplacement = stellarBridge;
-        ((Duct) cobaltDuct).bridgeReplacement = stellarBridge;
+        ((Duct) cobaltDuct).bridgeReplacement = cobaltBridge;
         fragilePump = new Pump("fragile-pump"){{
             requirements(Category.liquid, with(strontium, 10, steel, 8));
             pumpAmount = 8f / 60f;
@@ -1423,6 +1716,72 @@ public class EtBlocks {
             shootEffect = Fx.none;
             range = 160f;
             scaledHealth = 120;
+            researchCostMultiplier =  0.05f;
+            ClassificationMeta.put(this, cycle);
+        }};
+        whirl = new ItemTurret("whirl"){{
+            requirements(Category.turret, with(cobalt, 170, selenium, 110, paraline, 70));
+            ammo(
+                    cobalt, new FlakBulletType(5f, 5){{
+                        ammoMultiplier = 5f;
+                        splashDamage = 20f;
+                        splashDamageRadius = 20f;
+                        lightning = 3;
+                        lifetime = 22;
+                        lightningLength = 5;
+                        lightningDamage = 2.5f;
+                        shootEffect = Fx.shootBig;
+                        collidesGround = true;
+                        explodeRange = 10f;
+                    }}
+            );
+            drawer = new DrawTurret("stellar-");
+            shoot.shots = 4;
+            shoot.shotDelay = 5f;
+            size = 3;
+            recoil = 1.5f;
+            reload = 55f;
+            inaccuracy = 4f;
+            shootCone = 30f;
+            shootEffect = Fx.none;
+            range = 110f;
+            scaledHealth = 135;
+            researchCostMultiplier = 0.1f;
+            ClassificationMeta.put(this, cycle);
+        }};
+        ignite = new ItemTurret("ignite"){{
+            requirements(Category.turret, with(cobalt, 240, anthracite, 165, paraline, 130));
+            ammo(
+                    paraline, new ArtilleryBulletType(5f, 60){{
+                        hitEffect = Fx.blastExplosion;
+                        knockback = 3f;
+                        lifetime = 45f;
+                        width = height = 16f;
+                        collidesTiles = false;
+                        splashDamageRadius = 8 * 4.5f;
+                        splashDamage = 70f;
+                        status = EtStatuses.paralineBurning;
+                        statusDuration = 60f * 10f;
+                        frontColor = EternityPal.paralineColor;
+                        backColor = EternityPal.darkParalineColor;
+                        makeFire = true;
+                        trailEffect = Fx.colorTrail;
+                        ammoMultiplier = 4f;
+                    }}
+            );
+            ammoPerShot = 3;
+            targetAir = false;
+            reload = 190f;
+            recoil = 2f;
+            size = 3;
+            range = 270f;
+            inaccuracy = 1f;
+            shootCone = 10f;
+            scaledHealth = 110;
+            shootSound = Sounds.bang;
+            limitRange(0f);
+            researchCostMultiplier = 0.1f;
+            drawer = new DrawTurret("stellar-");
             ClassificationMeta.put(this, cycle);
         }};
         hope = new ItemTurret("hope"){{
@@ -1457,9 +1816,9 @@ public class EtBlocks {
             ClassificationMeta.put(this, cult);
         }};
         lie = new ItemReplaceTurret("lie"){{
-            requirements(Category.turret, with(titanium, 95, silicon, 70, lead, 120));
+            requirements(Category.turret, with(monoShards, 70, plastanium, 45));
             ammo(
-                    titanium, new PointBulletType(){{
+                    plastanium, new PointBulletType(){{
                         damage = 30;
                         ammoMultiplier = 2;
                         lifetime = 20f;
@@ -1482,7 +1841,7 @@ public class EtBlocks {
                             colorFrom = EternityPal.darkCultColor;
                         }});
                     }},
-                    nissin, new PointBulletType(){{
+                    expPlast, new PointBulletType(){{
                         damage = 55;
                         splashDamage = 10;
                         splashDamageRadius = 12;
@@ -1535,6 +1894,47 @@ public class EtBlocks {
             limitRange();
             ClassificationMeta.put(this, cult);
         }};
+        glance = new PowerReplaceTurret("glance"){{
+            requirements(Category.turret, with(monoShards, 90, plastanium, 40, skint, 30));
+            shootType = new ArtilleryBulletType(3f, 20){{
+                lifetime = 80f;
+                width = height = 12f;
+                collidesTiles = false;
+                splashDamageRadius = 5.5f * 8f;
+                splashDamage = 40f;
+                frontColor = EternityPal.skintColor;
+                backColor = EternityPal.darkSkintColor;
+                fragBullets = 3;
+                fragBullet = new LaserBulletType(){{
+                    colors = new Color[]{EternityPal.skintColor.cpy().mul(1f, 1f, 1f, 0.4f), EternityPal.skintColor, Color.white};
+                    length = 25;
+                    damage = 10;
+                }};
+            }};
+            outlineColor = Color.valueOf("0e0e0e");
+            drawer = new DrawTurret("cult-"){{
+                parts.add(
+                        new RegionPart("-back"){{
+                            progress = PartProgress.recoil;
+                            moveRot = 30;
+                            moveY = 1;
+                            mirror = true;
+                        }}
+                );
+            }};
+            reload = 110f;
+            shootCone = 20f;
+            rotateSpeed = 11f;
+            range = 165f;
+            recoil = 2f;
+            size = 2;
+            health = 780;
+            replaceBlock = hope;
+            shootSound = Sounds.artillery;
+            researchCostMultiplier = 0.05f;
+            consumePower(5f);
+            ClassificationMeta.put(this, cult);
+        }};
         resonance = new PowerTurret("resonance"){{
             requirements(Category.turret, with(monoShards, 220, plastanium, 80, wardCapsule, 20));
             shootType = new BasicBulletType(10f, 180f){{
@@ -1559,6 +1959,80 @@ public class EtBlocks {
             shootSound = Sounds.pulseBlast;
             researchCostMultiplier = 0.05f;
             consumeLiquid(oil, 20f / 60f);
+            ClassificationMeta.put(this, cult);
+        }};
+        pervision = new ContinuousReplaceTurret("pervision"){{
+            requirements(Category.turret, with(monoShards, 180, plastanium, 110, flavoredSkint, 80));
+            range = 200f;
+            recoil = 0f;
+            reload = 10f;
+            shootEffect = Fx.colorSparkBig;
+            smokeEffect = Fx.none;
+            size = 3;
+            shootY = 0;
+            rotateSpeed = 5.5f;
+            warmupMaintainTime = 20f;
+            minWarmup = 0.98f;
+            shootWarmupSpeed = 0.08f;
+            scaledHealth = 240;
+            shootSound = Sounds.none;
+            loopSoundVolume = 1f;
+            loopSound = Sounds.laserbeam;
+            coolant = consumeCoolant(0.3f);
+            consumePower(12.5f);
+            consumeLiquid(oil, 10f / 60f);
+            replaceBlock = glance;
+            drawer = new DrawTurret("cult-"){{
+                parts.addAll(
+                        new FlarePart(){{
+                            progress = PartProgress.warmup;
+                            color1 = EternityPal.cultColor;
+                            radius = 0f;
+                            radiusTo = 35f;
+                            stroke = 3f;
+                            rotation = 0f;
+                            spinSpeed = 1;
+                        }},
+                        new FlarePart(){{
+                            progress = PartProgress.warmup;
+                            color1 = EternityPal.cultColor;
+                            radius = 0f;
+                            radiusTo = 35f;
+                            stroke = 3f;
+                            rotation = 0f;
+                            spinSpeed = -1;
+                        }},
+                        new ShapePart(){{
+                            progress = PartProgress.warmup.curve(Interp.pow2In);
+                            color = EternityPal.cultColor;
+                            layer = Layer.effect;
+                            sides = 360;
+                            radius = 0;
+                            radiusTo = 4;
+                        }},
+                        new ShapePart(){{
+                            progress = PartProgress.warmup.curve(Interp.pow2In);
+                            color = Color.white;
+                            layer = Layer.effect;
+                            sides = 360;
+                            radius = 0;
+                            radiusTo = 2f;
+                        }}
+                );
+            }};
+            shootType = new PointLaserBulletType(){{
+                hitColor = trailColor = EternityPal.cultColor;
+                color = Color.white;
+                beamEffect = Fx.hitBulletColor;
+                sprite = "eternity-case-pervision-point-laser";
+                oscScl = 1.8f;
+                oscMag = 0.1f;
+                trailWidth = 3;
+                trailLength = 10;
+                damage = 50;
+                hitEffect = Fx.hitBulletColor;
+                smokeEffect = Fx.colorSparkBig;
+            }};
             ClassificationMeta.put(this, cult);
         }};
         well = new ItemTurret("well"){{
@@ -1617,12 +2091,193 @@ public class EtBlocks {
             limitRange();
             ClassificationMeta.put(this, cult);
         }};
+        bolter = new AccelPowerTurret("bolter"){{
+            requirements(Category.turret, with(silicon, 290, nissin, 430, titanium, 190, thorium, 120, surgeAlloy, 15));
+            shootType = new AccelLaserBoltBulletType(9.5f, 56f){{
+                splashDamage = 8.0F;
+                splashDamageRadius = 16.0F;
+                drag = 0.005F;
+                lifetime = 27.0F;
+                hitSize = 8.0F;
+                shootEffect = smokeEffect = Fx.none;
+                hitEffect = Fx.hitLancer;
+                hittable = false;
+            }};
+            squareSprite = false;
+            shoot = new ShootAlternate(14);
+            reload = 40f;
+            shootCone = 20f;
+            rotateSpeed = 4f;
+            range = 230f;
+            recoil = 3.5f;
+            size = 5;
+            health = 4000;
+            inaccuracy = 3;
+            shootSound = EtSounds.zbosonShoot;
+            lightning = true;
+            lightningThreshold = 12.0F;
+            baseLightningLength = 16;
+            lightningLengthDec = 1;
+            baseLightningDamage = 18.0F;
+            lightningDamageDec = 1.0F;
+            barBaseY = -10.75F;
+            barLength = 20.0F;
+            coolantMultiplier = 1.9f;
+            consumeCoolant(1.5f);
+            consumePower(3.6f);
+            ClassificationMeta.put(this, i);
+        }};
+        slash = new ItemTurret("slash"){{
+            requirements(Category.turret, with(Items.beryllium, 35, Items.silicon, 20));
+            ammo(
+                    Items.beryllium, new BasicBulletType(7f, 32){{
+                        width = 8f;
+                        height = 14f;
+                        shootEffect = Fx.shootBigColor;
+                        smokeEffect = Fx.shootBigSmoke;
+                        ammoMultiplier = 1;
+                        pierce = true;
+                        pierceBuilding = true;
+                        hitColor = backColor = trailColor = Pal.berylShot;
+                        frontColor = Color.white;
+                        trailWidth = 1.5f;
+                        trailLength = 10;
+                        hitEffect = despawnEffect = Fx.hitBulletColor;
+                    }},
+                    Items.tungsten, new BasicBulletType(6.6f, 47){{
+                        width = 9f;
+                        height = 14f;
+                        shootEffect = Fx.shootBigColor;
+                        smokeEffect = Fx.shootBigSmoke;
+                        ammoMultiplier = 1;
+                        reloadMultiplier = 0.7f;
+                        pierce = true;
+                        pierceBuilding = true;
+                        hitColor = backColor = trailColor = Pal.tungstenShot;
+                        frontColor = Color.white;
+                        trailWidth = 1.6f;
+                        trailLength = 10;
+                        hitEffect = despawnEffect = Fx.hitBulletColor;
+                    }}
+            );
+
+            drawer = new DrawTurret("reinforced-");
+            outlineColor = Pal.darkOutline;
+            size = 2;
+            envEnabled |= Env.space;
+            reload = 35f;
+            recoil = 0.3f;
+            range = 180;
+            shootCone = 3f;
+            health = 300 * size * size;
+            rotateSpeed = 1.8f;
+            shootY = 0;
+            hideDetails = false;
+
+            limitRange();
+            ClassificationMeta.put(this, i);
+        }};
+        fracture = new ItemTurret("fracture"){{
+            requirements(Category.turret, with(Items.tungsten, 35, Items.silicon, 35));
+            ammo(
+                    Items.tungsten, new BasicBulletType(5f, 20){{
+                        velocityRnd = 0.2f;
+                        width = 6f;
+                        height = 12f;
+                        shootEffect = Fx.shootBigColor;
+                        smokeEffect = Fx.shootBigSmoke;
+                        ammoMultiplier = 2;
+                        pierce = true;
+                        pierceBuilding = true;
+                        hitColor = backColor = trailColor = Items.tungsten.color;
+                        frontColor = Color.white;
+                        trailWidth = 1f;
+                        trailLength = 4;
+                        //TODO different effect?
+                        hitEffect = despawnEffect = Fx.hitBulletColor;
+                    }}
+            );
+
+            consumeLiquid(Liquids.hydrogen, 1.5f / 60f);
+            shoot.shots = 5;
+
+            //TODO cool reload animation
+            drawer = new DrawTurret("reinforced-");
+            outlineColor = Pal.darkOutline;
+            size = 2;
+            shootY = 6;
+            envEnabled |= Env.space;
+            reload = 30f;
+            recoil = 0.3f;
+            range = 90;
+            shootCone = 15f;
+            inaccuracy = 20f;
+            health = 300 * size * size;
+            rotateSpeed = 1.8f;
+            hideDetails = false;
+
+            limitRange();
+            ClassificationMeta.put(this, i);
+        }};
         mionDroneBlock = new PlaceUnitBlock("mion-drone-block"){{
             requirements(Category.units, with(titanium, 110, metaglass, 60, silicon, 75, steel, 40));
             unitType = mionDrone;
             size = 2;
             hasShadow = false;
             ClassificationMeta.put(this, ruin);
+        }};
+        cobaltPort = new FactoryPort("cobalt-port"){{
+            requirements(Category.units, with(cobalt, 370, selenium, 255, paraline, 190));
+            plans = Seq.with(
+                    new UnitPlan(mistake, 60f * 20, with(cobalt, 20, paraline, 12)),
+                    new UnitPlan(mistake, 60f * 20, with(cobalt, 75, paraline, 40, redcury, 25)),
+                    new UnitPlan(mistake, 60f * 20, with(cobalt, 100, paraline, 70, lunarFragment, 20))
+            );
+            size = 5;
+            researchCostMultiplier = 0.35f;
+            consumePower(5f);
+            ClassificationMeta.put(this, cycle);
+        }};
+        malachiteIncubator = new CrystalIncubator("malachite-incubator"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with());
+
+            isFirstTier = true;
+            unitType = UnitTypes.evoke;
+            health = 5000;
+            itemCapacity = 2000;
+            size = 3;
+            armor = 10f;
+            incinerateNonBuildable = true;
+            requiresCoreZone = true;
+
+            unitCapModifier = 10;
+            ClassificationMeta.put(this, malachite);
+        }};
+        malachiteCrystal = new ExplosiveCrystal("malachite-crystal"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with());
+            health = 460;
+            explodeEffect = new MultiEffect(new ParticleEffect(){{
+                line = true;
+                colorFrom = colorTo = EternityPal.malachiteColor;
+                lenFrom = 7f;
+                lenTo = 0;
+                particles = 8;
+                cone = 360;
+                lifetime = 45f;
+                length = explosionRadius * tilesize;
+            }}, new WaveEffect(){{
+                colorFrom = EternityPal.malachiteColor;
+                colorTo = EternityPal.darkMalachiteColor;
+                sizeTo = explosionRadius * tilesize;
+                lifetime = 45f;
+            }}
+            );
+            ClassificationMeta.put(this, malachite);
+        }};
+        perfectMalachite = new PerfectCrystal("perfect-malachite"){{
+            requirements(Category.effect, BuildVisibility.sandboxOnly, with());
+            health = 70;
+            ClassificationMeta.put(this, malachite);
         }};
     }
 }

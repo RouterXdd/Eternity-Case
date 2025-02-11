@@ -54,5 +54,7 @@ public class FrostyDrill extends Drill {
             super.read(read, revision);
             frost = read.f();
         }
+
+
     }
 }

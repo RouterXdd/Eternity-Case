@@ -1,10 +1,15 @@
 package eternity.content;
 
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
+import arc.math.Angles;
+import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
+import arc.util.Tmp;
 import eternity.graphic.EternityPal;
 import mindustry.entities.Effect;
 import mindustry.graphics.*;
@@ -15,6 +20,10 @@ import static mindustry.Vars.tilesize;
 public class EtFx {
     public static final Rand rand = new Rand();
     public static final Vec2 v = new Vec2();
+    public static void tri(float x, float y, float width, float length, float angle){
+        float wx = Angles.trnsx(angle + 90, width), wy = Angles.trnsy(angle + 90, width);
+        Fill.tri(x + wx, y + wy, x - wx, y - wy, Angles.trnsx(angle, length) + x, Angles.trnsy(angle, length) + y);
+    }
 
     public static final Effect
     cultTrail = new Effect(30, e -> {
@@ -55,6 +64,21 @@ public class EtFx {
         color(EternityPal.bloodRedLight);
 
         Drawf.tri(e.x, e.y, 4f, 25f * e.fout(), e.rotation);
+    }),
+    plasmaExplosion = new Effect(70f, 100f, e -> {
+        float rad = 10f;
+        rand.setSeed(e.id);
+
+        Draw.color(Color.white, EternityPal.ancient, e.fin() + 0.6f);
+        float circleRad = e.fin(Interp.circleOut) * rad * 4f;
+        Lines.stroke(4 * e.fout());
+        Lines.circle(e.x, e.y, circleRad);
+
+        for(int i = 0; i < 10; i++){
+            Tmp.v1.set(1, 0).setToRandomDirection(rand).scl(circleRad);
+            EtFx.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, rand.random(circleRad / 16, circleRad / 12) * e.fout(), rand.random(circleRad / 4, circleRad / 1.5f) * (1 + e.fin()) / 2, Tmp.v1.angle() - 180);
+        }
+        Drawf.light(e.x, e.y, circleRad * 1.35f, EternityPal.ancient, e.fout());
     }),
     terraCraft = new Effect(40f, 100f, e -> {
         float circleRad = 3f + e.finpow() * 65f;

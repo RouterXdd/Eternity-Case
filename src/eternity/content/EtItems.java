@@ -12,14 +12,14 @@ import static eternity.classes.mod.Classification.*;
 public class EtItems {
     public static Item
     //stellar
-    ruinSandItem, gold, strontium, steel, heatproofGlass, cosmicDust, oxidePalladium, palladium, electronicPart, repairPart, laserPart, platePart, launchPart, darknessPart,
+    ruinSandItem, gold, strontium, steel, heatproofGlass, cosmicDust, oxidePalladium, palladium, palladiumSteel, electronicPart, repairPart, laserPart, platePart, launchPart, darknessPart,
     //cult
-    monoShards, expPlast, wardCapsule, voidAlloy,
+    monoShards, cesium, skint, expPlast, flavoredSkint, corruptedSkint, wardCapsule, voidAlloy,
     //misc
     nissin,
-            //Encycle
-    cobalt, selenium, anthracite;
-    public static final Seq<Item> ruinexItems = new Seq<>(), abotiumItems = new Seq<>(), encycleItems = new Seq<>();
+            //Cyclefite
+    cobalt, selenium, anthracite, paraline, redcury, lunarFragment;
+    public static final Seq<Item> ruinexItems = new Seq<>(), abotiumItems = new Seq<>(), cyclefiteItems = new Seq<>();
     public static void load() {
         //misc
         nissin = new Item("nissin", Color.valueOf("82863b")){{
@@ -95,11 +95,33 @@ public class EtItems {
             cost = 0.8f;
             ClassificationMeta.put(this, cult);
         }};
+        cesium = new Item("cesium", Color.valueOf("a5d8b9")){{
+            hardness = 1;
+            buildable = false;
+            explosiveness = 0.25f;
+            cost = 1f;
+            ClassificationMeta.put(this, cult);
+        }};
+        skint = new Item("skint", Color.valueOf("e9b983")){{
+            hardness = 2;
+            charge = 0.5f;
+            ClassificationMeta.put(this, cult);
+        }};
         expPlast = new Item("explosive-plastanium", Color.valueOf("ca8962")){{
             hardness = 2;
             cost = 1.75f;
             explosiveness = 1f;
             flammability = 0.65f;
+            ClassificationMeta.put(this, cult);
+        }};
+        flavoredSkint = new Item("skint-flavored", Color.valueOf("7fac8c")){{
+            hardness = 2;
+            charge = 0.45f;
+            ClassificationMeta.put(this, cult);
+        }};
+        corruptedSkint = new Item("corrupted-skint", Color.valueOf("e9b2cc")){{
+            hardness = 2;
+            charge = 0.3f;
             ClassificationMeta.put(this, cult);
         }};
         wardCapsule = new Item("ward-capsule", Color.valueOf("47b199")){{
@@ -134,16 +156,29 @@ public class EtItems {
             flammability = 1.1f;
             ClassificationMeta.put(this, cycle);
         }};
+        paraline = new Item("paraline", Color.valueOf("c75782")){{
+            cost = 2f;
+            flammability = 0.35f;
+            healthScaling = 1.35f;
+            ClassificationMeta.put(this, cycle);
+        }};
+        redcury = new Item("redcury", Color.valueOf("c72828")){{
+            ClassificationMeta.put(this, cycle);
+        }};
+        lunarFragment = new Item("lunar-fragment", Color.valueOf("666c80")){{
+            cost = 3.5f;
+            ClassificationMeta.put(this, cycle);
+        }};
         ruinexItems.addAll(
                 strontium, gold, ruinSandItem, steel, heatproofGlass, cosmicDust, oxidePalladium, palladium,
                 electronicPart, repairPart, laserPart, platePart, launchPart, darknessPart
 
         );
         abotiumItems.addAll(
-                monoShards, plastanium, blastCompound, expPlast, wardCapsule, voidAlloy
+                monoShards, plastanium, blastCompound, skint, expPlast, flavoredSkint, corruptedSkint, wardCapsule, voidAlloy
         );
-        encycleItems.addAll(
-                cobalt, selenium, anthracite
+        cyclefiteItems.addAll(
+                cobalt, selenium, anthracite, paraline, redcury, lunarFragment
         );
     }
 }

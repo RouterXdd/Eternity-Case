@@ -8,7 +8,7 @@ import mindustry.type.Liquid;
 import static eternity.classes.mod.Classification.*;
 
 public class EtLiquids {
-    public static Liquid corruptedWater, helium;
+    public static Liquid corruptedWater, helium, mercury;
     public static void load() {
 
         corruptedWater = new Liquid("corrupted-water", Color.valueOf("2b213d")) {{
@@ -22,6 +22,10 @@ public class EtLiquids {
         }};
         helium = new Liquid("helium", Color.valueOf("cb3d48")){{
             gas = true;
+            ClassificationMeta.put(this, cycle);
+        }};
+        mercury = new Liquid("mercury", Color.valueOf("9ea4ad")){{
+            viscosity = 0.9f;
             ClassificationMeta.put(this, cycle);
         }};
     }

@@ -5,6 +5,8 @@ import arc.graphics.Color;
 public class EternityPal {
     public static Color
 
+    skintColor = Color.valueOf("e9b983"),
+    darkSkintColor = Color.valueOf("ac845d"),
     cultColor = Color.valueOf("50a96d"),
     darkCultColor = Color.valueOf("2f7958"),
     cosmicColor = Color.valueOf("81d4a7"),
@@ -26,6 +28,9 @@ public class EternityPal {
     darkGlareColor = Color.valueOf("ba4773"),
     zyconColor = Color.valueOf("5fa1da"),
     grandColor = Color.valueOf("fc357f"),
+    paralineColor = Color.valueOf("c75782"),
+    darkParalineColor = Color.valueOf("a93d46"),
+    ancient = Color.valueOf("f2e878"),
     //Biotech's colors )
     bloodRedLight = Color.valueOf("ff5454"),
     bloodRed = Color.valueOf("c72c41");

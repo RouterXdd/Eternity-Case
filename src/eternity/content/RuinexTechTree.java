@@ -6,7 +6,7 @@ import mindustry.game.Objectives.*;
 import static eternity.content.EtItems.*;
 import static eternity.content.EtBlocks.*;
 import static eternity.content.EtSectors.*;
-import static eternity.content.EtUnits.*;
+import static eternity.content.EtUnitTypes.*;
 import static mindustry.content.TechTree.*;
 import static mindustry.content.UnitTypes.*;
 

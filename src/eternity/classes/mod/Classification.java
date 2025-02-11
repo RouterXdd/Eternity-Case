@@ -11,6 +11,7 @@ public enum Classification {
     cycle("cycle", Color.valueOf("b3f4ff")),
     malachite("malachite", EternityPal.malachiteColor),
     cult("cultist", EternityPal.cultColor),
+    polygon("polygon", Pal.lightishGray),
     misc("misc", Color.valueOf("eac2a9")),
     i("null", Pal.darkestGray);
 

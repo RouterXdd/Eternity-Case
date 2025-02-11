@@ -67,6 +67,10 @@ public class CoreFrost extends CoreBlock {
                         tile.setFloor(frostCoreZone.asFloor());
                         Fx.vaporSmall.at(tile);
                     }
+                    if (tile.floor() == mercuryTile){
+                        tile.setFloor(mercuryIce.asFloor());
+                        Fx.vaporSmall.at(tile);
+                    }
                 }
             });
         }
@@ -87,6 +91,11 @@ public class CoreFrost extends CoreBlock {
                     }
                     if (tile.floor() == frostCoreZone){
                         tile.setFloor(shallowFrostCoreZone.asFloor());
+                        Fx.vaporSmall.at(tile);
+                        if (tile.build != null && tile.build != this) tile.build.kill();
+                    }
+                    if (tile.floor() == mercuryIce){
+                        tile.setFloor(mercuryTile.asFloor());
                         Fx.vaporSmall.at(tile);
                         if (tile.build != null && tile.build != this) tile.build.kill();
                     }
