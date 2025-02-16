@@ -43,7 +43,6 @@ import static mindustry.content.StatusEffects.*;
 import static eternity.content.EtItems.*;
 
 public class EtUnitTypes {
-            //Random units
     public static UnitType
             //stellar units
             coreDrone, viraDrone, frostDrone,
@@ -54,7 +53,7 @@ public class EtUnitTypes {
             mionDrone, viraSavior, oblivion,
             //Malachite units
             infectedMionDrone, infectedMionDroneL, infectedMionDroneXL, electron, proton, neutron, atom, infectedGerb,
-            twist,
+            twist, force,
             //Stellar encycle units
             mistake, bug, exploit,
             mineral, geode, gem,
@@ -1142,6 +1141,53 @@ public class EtUnitTypes {
 
             constructor = CrawlUnit::create;
             ClassificationMeta.put(this, malachite);
+        }};
+        force = new StellarUnit("force"){{
+            outlineColor = Color.valueOf("030304");
+            speed = 0.95f;
+            drag = 0.4f;
+            hitSize = 20f;
+            rotateSpeed = 4.5f;
+            health = 440;
+            outlineRadius = 3;
+
+            legCount = 4;
+            legLength = 10f;
+            legForwardScl = 0.8f;
+            legMoveSpace = 1.8f;
+            hovering = true;
+            armor = 2f;
+            constructor = LegsUnit::create;
+
+            shadowElevation = 0.2f;
+            groundLayer = Layer.legUnit - 1f;
+            ClassificationMeta.put(this, malachite);
+            parts.add(new RegionPart("-outline"){{
+                under = true;
+                mirror = outline = false;
+            }});
+
+            weapons.add(new Weapon("force-weapon"){{
+                            top = mirror = false;
+                            shootY = 7f;
+                            reload = 85f;
+                            ejectEffect = Fx.none;
+                            recoil = 0f;
+                            x = 0f;
+                            shootSound = Sounds.sap;
+
+                            bullet = new SapBulletType(){{
+                                sapStrength = 0f;
+                                length = 70f;
+                                damage = 80;
+                                shootEffect = Fx.shootSmall;
+                                hitColor = color = EternityPal.malachiteColor;
+                                despawnEffect = Fx.none;
+                                width = 0.6f;
+                                lifetime = 20f;
+                                knockback = 4f;
+                            }};
+                        }});
         }};
         mistake = new StellarUnit("mistake"){{
             speed = 0.6f;

@@ -13,6 +13,7 @@ import arc.util.io.Writes;
 import mindustry.entities.Lightning;
 import mindustry.entities.Mover;
 import mindustry.entities.bullet.BulletType;
+import mindustry.entities.part.RegionPart;
 import mindustry.graphics.Layer;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.blocks.defense.turrets.Turret;
@@ -38,7 +39,18 @@ public class AccelPowerTurret extends PowerTurret {
 
     public AccelPowerTurret(String name) {
         super(name);
-        drawer = new DrawTurret("light-"){
+        recoils = 2;
+        drawer = new DrawTurret("light-"){{
+                for(int i = 0; i < 2; i ++){
+                    int f = i;
+                    parts.add(new RegionPart("-barrel-" + (i == 0 ? "l" : "r")){{
+                        progress = PartProgress.recoil;
+                        recoilIndex = f;
+                        under = true;
+                        moveY = -2f;
+                    }});
+                }
+            }
             @Override
             public void drawTurret(Turret block, TurretBuild build) {
                 if(!(build instanceof AccelPowerTurretBuild t)) return;
@@ -50,6 +62,7 @@ public class AccelPowerTurret extends PowerTurret {
                     Draw.color(barColors[0], barColors[1], t.heat);
                     Lines.stroke(barStroke);
                     Lines.lineAngle(t.x + v.x, t.y + v.y, t.rotation, t.speedf() * barLength, false);
+                    Draw.reset();
                 }
             }
         };

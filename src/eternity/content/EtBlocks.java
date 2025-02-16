@@ -2276,7 +2276,7 @@ public class EtBlocks {
         }};
         perfectMalachite = new PerfectCrystal("perfect-malachite"){{
             requirements(Category.effect, BuildVisibility.sandboxOnly, with());
-            health = 70;
+            health = (int) (armor = Float.MAX_VALUE);
             ClassificationMeta.put(this, malachite);
         }};
     }
